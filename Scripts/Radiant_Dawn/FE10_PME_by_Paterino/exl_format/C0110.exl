@@ -1,0 +1,432 @@
+include std:fe10:prelude;
+
+callback[0x4](4, 8, 4, 8, 0, "埋宝１") {
+    GetRndTreasure("IID_COIN", "埋宝１");
+}
+
+callback[0x4](1, 3, 1, 3, 0, "埋宝２") {
+    GetRndTreasure("IID_COIN", "埋宝２");
+}
+
+callback[0x4](6, 2, 6, 2, 0, "埋宝３") {
+    GetRndTreasure("IID_COIN", "埋宝３");
+}
+
+def RegistLocationFlags() {
+    regist("埋宝１");
+    regist("埋宝２");
+    regist("埋宝３");
+}
+
+def RegistLocationTT() {}
+
+def RegistBaseTalkFlags() {
+    regist("拠点会話_ペレアス");
+    regist("拠点会話_ジル");
+}
+
+callback[0xE]("ペレアス", "拠点会話_ペレアス") {
+    if (Check()) {
+        if ((!UnitCheckLiveOrPartyForBaseTalkByPID("PID_SOTHE") || 0) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0110_ペレアス会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    MindGetMoney(10000);
+    set("拠点会話_ペレアス");
+    label l4;
+}
+
+callback[0xE]("ジル", "拠点会話_ジル") {
+    if (Check()) {
+        if ((!UnitCheckPlayerOrAbsentByPID("PID_MICAIAH") || !UnitCheckLiveOrPartyForBaseTalkByPID("PID_JILL")) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0110_ジル会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    if (UnitCheckPlayerOrAbsentByPID("PID_MICAIAH")) {
+        UnitGetItemShowing(UnitGetByPID("PID_MICAIAH"), "IID_HOLYWATER");
+    }
+    set("拠点会話_ジル");
+    label l4;
+}
+
+def DFSet_0110_OP0() {}
+
+def DFSet_0110_OP1() {}
+
+def DFSet_0110_ED() {
+    DDFlagOn("DF_人物漆黒の騎士");
+    DDFlagOn("DF_用語エタルド");
+}
+
+def anonfn11() {
+    BGM1Start("BGM_EVT_1_10_A");
+    ENV1Start("SFX_ENV_0110_BASE1");
+    ENV2Start("SFX_ENV_0110_BASE_HORSE1");
+    TalkEvent("MS_0110_OP_01_T");
+    BGM1VolumeDown();
+    TalkEvent("MS_0110_OP_01");
+    ENV2FadeOut();
+    ENV1FadeOut();
+    BGM1FadeOut_Wait();
+    Interval();
+    BGM2Start("BGM_EVT_1_10_B");
+    ENV1Start("SFX_ENV_0110_DEIN1");
+    TalkEvent("MS_0110_OP_02_T");
+    ENV1FadeOut();
+    ENV2Start("SFX_ENV_0110_ROOM1");
+    TalkEvent("MS_0110_OP_02");
+    BGM2VolumeDown();
+    TalkEvent("MS_0110_OP_03");
+    ENV2FadeOut();
+    BGM2FadeOut_Wait();
+    Interval();
+    BGM1Start("BGM_EVT_1_10_C");
+    ENV1Start("SFX_ENV_0110_CELEBRATION1");
+    TalkEvent("MS_0110_OP_04_T");
+    TalkEvent("MS_0110_OP_04");
+    SFXPlay("SFX_EVT_0110_CHEER1");
+    WaitM(4000);
+    TalkResume();
+    ENV1FadeOut();
+    BGM1FadeOut_Wait();
+}
+
+def anonfn12() {
+    REventStart("bmap0110", 1);
+    InstantDispos("bmap0110_op_01_micaiah_c");
+    CameraSet(negate(13102), 4381, 1418, 871, 862, negate(3));
+    UnitAnimEx(UnitGetByPID("PID_MICAIAH"), "イベント６", 100, 0, 0);
+    BGM1Start("BGM_EVT_1_10_D");
+    FadeIn_Wait(1000);
+    TalkEvent("MS_0110_OP1_01");
+    SFXPlay("SFX_EVT_0110_YUNE_SING1");
+    UnitAnim(UnitGetByPID("PID_MICAIAH"), "イベント５");
+    TalkResume();
+    SFXPlay("SFX_EVT_0110_YUNE_SING2");
+    TalkResume();
+    SFXPlay("SFX_EVT_0110_YUNE_SING3");
+    TalkResume();
+    SFXPlay("SFX_EVT_0110_YUNE_SING4");
+    TalkResume();
+    Dispos("bmap0110_op_01_c");
+    CameraMove(negate(13102), 4381, 1418, 730, 588, negate(3), 500);
+    BGM1FadeOut_Slow();
+    TalkResume();
+    UnitFocusByPID("PID_MICAIAH");
+    SFXPlay("SFX_EVT_0110_YUNE_SURPRISE1");
+    UnitAnim(UnitGetByPID("PID_MICAIAH"), "イベント７");
+    TalkResume();
+    FadeOut_Wait(1000);
+    REventEnd(1, 1);
+}
+
+def anonfn13() {
+    BGM1Start("BGM_EVT_1_10_G");
+    TalkEvent_Die("MS_0110_EV_02_0");
+    EffectPlay("EID_0110SWORDFLASH");
+    WaitM(4000);
+    TalkEvent("MS_0110_EV_02");
+    Interval();
+    TalkEvent("MS_0110_ED_01");
+    BGM1FadeOut_Wait();
+}
+
+def anonfn14() {
+    TutorialUnlock(48);
+}
+
+def Startup() {
+    regist("ボス会話漆黒の騎士");
+    regist("ボス会話ミカヤ");
+    regist("ミカヤ⇒漆黒の騎士");
+    regist("ボス増援");
+    regist("ボス配置");
+    RegistLocationFlags();
+    RegistBaseTalkFlags();
+}
+
+def gmap0110_point() {
+    GMapPointOn(1, 317, 225, 50, 2109836);
+    GMapPointOn(2, 240, 158, 50, 2109836);
+    GMapPointOn(3, 188, 127, 50, 2109836);
+    GMapPointOn(4, 233, 88, 50, 2109836);
+    GMapPointOn(5, 189, 83, 50, 2109836);
+    GMapPointOn(6, 216, 137, 50, 2109836);
+    GMapPointOn(7, 211, 208, 50, 2109836);
+    GMapPointOn(8, 172, 183, 50, 2109836);
+    GMapPointOn(9, 154, 138, 50, 2109836);
+    GMapPointOn(10, 265, 122, 50, 2109836);
+    GMapPointOn(11, 272, 156, 50, 2109836);
+    GMapPointOn(12, 290, 154, 50, 2109836);
+    GMapPointOn(13, 294, 170, 50, 2109836);
+    GMapPointOn(14, 215, 238, 50, 2109836);
+}
+
+def gmap0110_point_jeld() {
+    WaitM(1400);
+    FaceCreate(1, "FID_JELD", 430, 200, 700, 26638);
+    GMapPointOffAll();
+    GMapPointOn(15, 296, 126, 50, 9187616);
+    GMapPointOn(16, 259, 99, 50, 9187616);
+    GMapPointOn(17, 312, 150, 50, 9187616);
+    GMapPointOn(18, 322, 151, 50, 9187616);
+    WaitM(4200);
+    GMapPointOff(15);
+    GMapPointOff(16);
+    GMapPointOff(17);
+    GMapPointOff(18);
+    GMapPointOn(0, 296, 126, 75, 9187616);
+}
+
+def gmap0110_yazirusi() {
+    WaitM(3000);
+    GMapCurveDraw("curve0110_1");
+}
+
+def anonfn19() {
+    BlackOut();
+    GMapBuild("GID_0110");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0110");
+    GMapMove(512, 377, 5937, 5941, 0, 0);
+    GMapCurveEntry("curve0110_1");
+    FacePreLoad("FID_JELD");
+    FacePreLoad("FID_MICAIAH");
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    FaceCreate(0, "FID_MICAIAH", 120, 272, 400, 26639);
+    GMapPointOn(0, 277, 164, 100, 2109836);
+    TalkEvent("MS_0110_GMAP_01");
+    TalkResume();
+    if (IsJPVersion()) {
+        WaitM(3800);
+        TalkResume();
+    }
+    CreateVMCThread("gmap0110_point");
+    TalkResume();
+    FaceDelete(0, 400);
+    WaitM(500);
+    CreateVMCThread("gmap0110_point_jeld");
+    TalkResume();
+    WaitForVMCThread();
+    FaceDelete(1, 400);
+    WaitM(1200);
+    GMapPointOn(1, 277, 164, 100, 2109836);
+    TalkResume();
+    CreateVMCThread("gmap0110_yazirusi");
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0110");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+callback[Event.Turn](1, 1, 1) {
+    if (EvKeyRead()) {
+        set("gf_complete");
+    }
+}
+
+def anonfn21() {
+    MapLoad("bmap0110");
+    SallySetByGroupRank("bmap0110_mikata");
+    InstantDisposRank("bmap0110_mikata");
+    InstantDispos("bmap0110_op_01_c");
+    UnitSetPosDir(UnitGetByPos(5, 1), 6, 3, 4);
+    UnitSetPosDir(UnitGetByPos(6, 1), 8, 3, 4);
+    UnitSetPosDirByPID("PID_JELD", 7, 4, 4);
+    UnitForcedSallyByPID("PID_MICAIAH");
+    UnitDontMoveSallyByPID("PID_MICAIAH");
+    InstantHeroFocus();
+    FadeIn_Wait(500);
+}
+
+def Opening0() {
+    BlackOut();
+    if (EvKeyReadY()) {
+        anonfn13();
+    }
+    anonfn19();
+    ChapterTitle("C0110");
+    anonfn11();
+    DFSet_0110_OP0();
+}
+
+def Opening1() {
+    WaitM(500);
+    EvDevStart("bmap0110", "bmap0110_mikata");
+    anonfn12();
+    anonfn21();
+    DFSet_0110_OP1();
+}
+
+def Opening2() {
+    v0 = UnitGetByPID("PID_JELD");
+    ENV0FadeOut();
+    BGM1Start("BGM_EVT_1_10_E");
+    ENV1Start("SFX_ENV_0110_NIGHT1");
+    UnitFocus(v0);
+    FocusWait();
+    TalkEvent("MS_0110_OP2_01");
+    UnitMoveDir(v0, "2");
+    TalkResume();
+    BGM1FadeOut();
+    DisposWarpRank("bmap0110_bknight");
+    UnitTackle(UnitGetByPID("PID_DARKKNIGHT_0"), v0, 1);
+    UnitMoveWait();
+    TalkResume();
+    BGM1FadeOut();
+    BGM2Start("BGM_EVT_1_10_F");
+    TalkEvent("MS_0110_OP2_02");
+    SetSight(1);
+    UnitFocusOff();
+    UnitMovePos(v0, 4, 2);
+    UnitMoveWait();
+    UnitEscape(UnitGetByPos(6, 3));
+    UnitEscape(UnitGetByPos(8, 3));
+    UnitEscape(v0);
+    DisposRank("bmap0110_teki");
+    UnitFocusOn();
+    TalkResume();
+    ENV0FadeIn();
+    ENV1FadeOut();
+    BGM2FadeOut();
+    BMSetLoseTerm(1, "ML_漆死");
+}
+
+callback[0x8]("PID_MICAIAH", "PID_DARKKNIGHT_0", 0, "ミカヤ⇒漆黒の騎士") {
+    TalkEvent_Map("MS_0110_TK_01");
+    set("ミカヤ⇒漆黒の騎士");
+}
+
+callback[0x11]("PID_DARKKNIGHT_0", "PID_MICAIAH", 0, "") {
+    TalkEvent_Map("MS_0110_EV_01");
+    MindSetMind(0);
+}
+
+callback[Event.Turn](2, 2, 0) {
+    DisposRank("bmap0110_z01");
+}
+
+callback[Event.Turn](3, 3, 0) {
+    DisposRank("bmap0110_z02");
+}
+
+callback[Event.Turn](4, 4, 0) {
+    DisposRank("bmap0110_z03");
+}
+
+callback[Event.Turn](5, 5, 0) {
+    DisposRank("bmap0110_z04");
+}
+
+callback[Event.Turn](7, 7, 0) {
+    DisposSetMode("bmap0110_z05", 0, 1, 1);
+}
+
+callback[Event.Turn](9, 9, 0) {
+    DisposSetMode("bmap0110_z06", 0, 1, 1);
+}
+
+callback[0x7]() {
+    if (ForceGetCount(1) == 0) {
+        set("ボス増援");
+    }
+}
+
+callback[Event.Turn](0, 0, 0) {
+    if (get("ボス増援") && !get("ボス配置")) {
+        DisposRank("bmap0110_boss");
+        set("ボス配置");
+    }
+}
+
+callback[Event.DieMap]("PID_JELD") {
+    set("gf_complete");
+}
+
+callback[Event.DieMap]("PID_MICAIAH") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MS_0110_DIE_MICAIAH");
+}
+
+callback[Event.DieMap]("PID_DARKKNIGHT_0") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MDIE_DARKKNIGHT_0_GAMEOVER");
+}
+
+callback[Event.DieBattle]("PID_JELD", "PID_DARKKNIGHT_0", 1, "ボス会話漆黒の騎士") {
+    TalkEvent_BossBGM("MS_0110_BT_DARKKNIGHT", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話漆黒の騎士");
+}
+
+callback[Event.DieBattle]("PID_JELD", "PID_MICAIAH", 1, "ボス会話ミカヤ") {
+    TalkEvent_BossBGM("MS_0110_BT_MICAIAH", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話ミカヤ");
+}
+
+callback[0x1]("gf_complete") {
+    WaitM(250);
+    FadeOut(1500);
+    WaitM(750);
+    BGMFadeOut(0, 1500);
+    WaitM(1500);
+    AllUnitEscape();
+    MapFree();
+    anonfn13();
+    TEAM_0110_ED();
+    DFSet_0110_ED();
+    anonfn14();
+}
+
+callback[0xC]("") {
+    Achieve_CLEAR_BONUS(2000, 2000);
+    Achieve_TURN_BONUS(1000, 500, 13, 18, 1000, 500, 13, 18);
+    Achieve_LIVE_BONUS(0, 0);
+}
+
+callback[Event.TurnAfter](1, 1, 0) {
+    TutorialRunTypeB(48, "scripts/T01.cmb", "tut_06_Sakuteki", "MT_C06_s策敵", "MT_C06策敵", "");
+}
+
+callback[Event.TurnAfter](1, 1, 0) {
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        if ((UnitTstSkill(v1, "SID_ANIMALIZE"))) {
+            UnitFocus(v1);
+            UnitTransform(v1, 1);
+            UnitMoveWait();
+            UnitSet(v1, 8, 30);
+        }
+        v1 = v0;
+    }
+}
+
+#callback[Event.Turn](1, 1, 0) {
+#    set("gf_complete");
+#}

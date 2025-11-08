@@ -1,0 +1,156 @@
+include std:fe10:prelude;
+
+def DFSet_FINAL() {
+    DDExtraFlagAmlitaOn();
+}
+
+def DFSet_FINAL_Sanaki() {
+    DDFlagOn("DF_人物ミサハ");
+    DDFlagOn("DF_関係ミカヤミサハ祖母");
+    DDFlagOn("DF_関係サナキミサハ祖母");
+    DDFlagOn("DF_関係サナキミカヤ姉妹");
+}
+
+def DFSet_FINAL_Pelleas() {
+    DDFlagOff("DF_関係アシュナードアムリタペレアス親子？");
+}
+
+def DFSet_FINAL_Senerio() {
+    DDFlagOff("DF_関係アシュナードアムリタペレアス親子？");
+    DDFlagOn("DF_関係アシュナードアムリタセネリオ親子？");
+}
+
+def Startup() {}
+
+def BeforeEpilogue() {
+    if (GameGetRound() < 2) {
+        DisableSkip();
+    }
+    VIEnableDimming(1);
+    BlackOut();
+    BGMSetVol(1, 75, 0);
+    v0 = "RID_外観-ベグニオン2";
+    RectBuild(v0);
+    FadeIn_Wait(1500);
+    RectSetCurve(v0, 1, 0, 0, negate(500), 6000);
+    WaitM(6000);
+    TalkEvent("MS_GED_01");
+    RectKill(v0);
+    BGMSetVol(1, 100, 2000);
+    WaitM(500);
+    VIEnableDimming(0);
+    EnableSkip();
+}
+
+callback[0x14]("PID_PELLEAS", "PelleasIsAlive") {
+    #DFSet_FINAL_Pelleas();
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_Pel");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+callback[0x14]("PID_CAINEGHIS", "") {
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_02");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+callback[0x14]("PID_SANAKI", "") {
+    #DFSet_FINAL_Sanaki();
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_03");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+callback[0x14]("PID_TIBARN", "") {
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_04");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+callback[0x14]("PID_ERINCIA", "") {
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_05");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+@NoDefaultReturn
+def CheckEpilogu_Sen() {
+    #return (UnitCheckLiveOrPartyByPID("PID_SENERIO") && get("G_MS_0308_BT_Sen")) && get("G_MS_0315_BT_Tau_Sen");
+}
+
+callback[0x14]("PID_SENERIO", "CheckEpilogu_Sen") {
+    #DFSet_FINAL_Senerio();
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    #VIEnableDimming(1);
+    #BGMSetVol(1, 75, 500);
+    #TalkEvent("MS_GED_Sen");
+    #BGMSetVol(1, 100, 1000);
+    #VIEnableDimming(0);
+    #EnableSkip();
+}
+
+def AfterEpilogue() {
+    #if (!UnitCheckLiveByPID("PID_ERLAN")) {
+    #    return 0;
+    #}
+    #if (GameGetRound() < 2) {
+    #    DisableSkip();
+    #}
+    VIEnableDimming(1);
+    BGMSetVol(1, 75, 500);
+    TalkEvent("MS_GED_Erl");
+    BGMSetVol(1, 100, 1000);
+    VIEnableDimming(0);
+    EnableSkip();
+}
+
+def GrandFinale() {
+    DFSet_FINAL();
+    DisableSkip();
+    VIEnableDimming(0);
+    WaitM(2000);
+    StaffRoll();
+    VIEnableDimming(1);
+    FadeNone();
+    WaitM(1000);
+    FinEffect();
+    BGM1Start("BGM_ED_SCORE1");
+    WarRecord();
+    UnitRanking();
+    BGM1FadeOut_Wait();
+    EnableSkip();
+}
+

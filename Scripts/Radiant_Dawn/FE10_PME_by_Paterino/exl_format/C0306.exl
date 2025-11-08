@@ -1,0 +1,733 @@
+include std:fe10:prelude;
+
+callback[0x4](18, 5, 18, 5, 1, "敵到達１") {
+    set("敵到達１");
+    set("gf_gameover");
+}
+
+callback[0x4](14, 17, 14, 17, 0, "埋宝２") {
+    GetRndTreasure("IID_COIN", "埋宝２");
+}
+
+callback[0x4](8, 11, 8, 11, 0, "埋宝３") {
+    GetRndTreasure("IID_COIN", "埋宝３");
+}
+
+callback[0x4](23, 15, 23, 15, 0, "埋宝４") {
+    GetRndTreasure("IID_COIN", "埋宝４");
+}
+
+def anonfn4() {
+    SetShooter(14, 6, 4, "IID_IRONARCH");
+}
+
+def anonfn5() {
+    SetShooter(18, 9, 4, "IID_IRONARCH");
+}
+
+def RegistLocationFlags() {
+    regist("敵到達１");
+    regist("埋宝１");
+    regist("埋宝２");
+    regist("埋宝３");
+    regist("埋宝４");
+}
+
+def RegistLocationTT() {
+    anonfn4();
+    anonfn5();
+}
+
+def RegistBaseTalkFlags() {
+    regist("拠点会話_ハール");
+}
+
+callback[0xE]("ハール", "拠点会話_ハール") {
+    if (Check()) {
+        if ((!UnitCheckPlayerOrAbsentByPID("PID_IKE") || !UnitCheckReadyToBaseTalkByPID("PID_HAAR")) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0306_ハール会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    if (UnitCheckPlayerOrAbsentByPID("PID_IKE")) {
+        UnitGetItemShowing(UnitGetByPID("PID_IKE"), "IID_10000G");
+    }
+    set("拠点会話_ハール");
+    label l4;
+}
+
+def DFSet_0306_OP0() {}
+
+def DFSet_0306_OP1() {}
+
+def DFSet_0306_ED() {
+    DDFlagOn("DF_人物シグルーン");
+    DDFlagOn("DF_関係シグルーンサナキ忠誠");
+}
+
+def anonfn13() {
+    ENV1Start("SFX_ENV_0306_GADUS1");
+    TalkEvent("MS_0306_OP_01_T");
+    ENV1FadeOut();
+    BGM1Start("BGM_EVT_3_6_A");
+    ENV2Start("SFX_ENV_0306_GADUS2");
+    TalkEvent("MS_0306_OP_01");
+    Interval();
+    BGM1VolumeDown();
+    TalkEvent("MS_0306_OP_02");
+    ENV2FadeOut();
+    BGM1FadeOut_Slow_Wait();
+    Interval();
+    BGM1FadeStart("BGM_EVT_3_6_B");
+    TelopInFast("EID_T0306A");
+    REventStart("bmap0306", 1);
+    InstantDispos("bmap0306_op01_ike_c");
+    InstantDispos("bmap0306_op01_c");
+    InstantForceUnitLanding(0);
+    CameraSet(0, 4000, 1600, 1150, 1150, negate(100));
+    FadeIn(1500);
+    TelopWait();
+    v0 = UnitGetByPID("PID_IKE");
+    v1 = UnitGetByPID("PID_SENERIO");
+    v2 = UnitGetByPID("PID_RIEUSION");
+    CameraMove(0, 4000, 1600, 950, 650, negate(100), 1000);
+    UnitWalkDir(1);
+    UnitMoveRoute(v0, "11,11, 10, 8");
+    UnitWalkDir(0);
+    WaitM(400);
+    UnitMoveRoute(v1, "15, 14");
+    UnitMoveWaitID(v0);
+    WaitM(1000);
+    TalkEvent("MS_0306_OP_03");
+    UnitSee(v0, v2);
+    TalkResume();
+    UnitSee(v2, v0);
+    TalkResume();
+    UnitRotate(v2, 1, negate(1));
+    TalkResume();
+    UnitSee(v2, v0);
+    TalkResume();
+    REventEnd(1, 1);
+    BGM1FadeOut_Wait();
+}
+
+def anonfn14() {
+    ENV1Start("SFX_ENV_0306_SERIORA1");
+    TalkEvent("MS_0306_OP_04_1");
+    ENV1FadeOut_Fast();
+    REventStart("bmap0306", 1);
+    InstantDispos("bmap0306_op02_c");
+    InstantForceUnitLanding(0);
+    InstantDisposRank("bmap0306_teki");
+    CameraSet(0, 4000, 1600, 1850, 550, negate(200));
+    BGM1Start("BGM_EVT_3_6_C");
+    FadeIn_Wait(500);
+    BuildInstAnim(18, 4, 0);
+    WaitM(1000);
+    Dispos("bmap0306_op02_02_c");
+    Dispos("bmap0306_op02_03_c");
+    CameraRecordInit();
+    CameraRecordAdd(2000, 0, 4000, 1600, 750, 1850, 66);
+    CameraRecordAdd(4000, 0, 4000, 1600, 1850, 2650, 118);
+    CameraRecordAdd(6000, 0, 4000, 1600, 2650, 1850, 43);
+    CameraRecordAdd(8000, 0, 4000, 1600, 1850, 550, negate(200));
+    CameraRecordStart(8000);
+    CameraMoveWait(0);
+    TalkEvent("MS_0306_OP_04_2");
+    FadeOut_Wait(500);
+    BuildInstAnim(18, 4, 3);
+    REventEnd(1, 1);
+    BGM1FadeOut_Wait();
+}
+
+def anonfn15() {
+    ENV2Start("SFX_ENV_0306_WIND4");
+    TalkEvent("MS_0306_ED_01");
+    ENV2FadeOut_Wait();
+    Interval();
+    BGM1Start("BGM_EVT_3_6_D");
+    ENV1Start("SFX_ENV_0306_GADUS1");
+    TalkEvent("MS_0306_ED_02_T");
+    ENV1FadeOut_Fast();
+    ENV2Start("SFX_ENV_0306_GADUS2");
+    TalkEvent("MS_0306_ED_02");
+    ENV2FadeOut();
+    BGM1FadeOut_Wait();
+    Interval();
+    ENV1Start("SFX_ENV_0306_DEIN1");
+    TalkEvent("MS_0306_ED_03_T");
+    BGM2Start("BGM_EVT_3_6_E");
+    TalkEvent("MS_0306_ED_03");
+    ENV1FadeOut();
+    BGM2FadeOut_Wait();
+}
+
+def Startup() {
+    regist("ボス会話");
+    regist("ボス会話アイク");
+    regist("ボス会話リュシオン");
+    RegistLocationFlags();
+    RegistBaseTalkFlags();
+    regist("BTZEPHIA");
+    regist("BTGRISS");
+    regist("BTMARNI");
+    regist("BTMAUVIER");
+}
+
+def gmap0306_disp() {
+    FaceCreate(0, "FID_SKRIMIR", 244, 220, 400, 26639);
+    GMapPointOn(0, 356, 140, 100, 2109836);
+    WaitM(3100);
+    FaceCreate(1, "FID_ZELGIUS", 500, 190, 400, 26638);
+    GMapPointOn(1, 366, 132, 100, 9187616);
+}
+
+def anonfn18() {
+    BlackOut();
+    GMapBuild("GID_0306");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0306");
+    GMapMove(535, 460, 9000, 8928, 0, 0);
+    GMapCurveEntry("curve0306_1");
+    FacePreLoad("FID_SKRIMIR");
+    FacePreLoad("FID_ZELGIUS");
+    FacePreLoad("FID_LAY");
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    CreateVMCThread("gmap0306_disp");
+    TalkEvent("MS_0306_GMAP_01");
+    WaitForVMCThread();
+    GMapPointOff(0);
+    GMapPointOn(2, 356, 140, 50, 2109836);
+    TalkResume();
+    GMapPointOff(1);
+    GMapPointOff(2);
+    GMapPointOn(3, 378, 112, 50, 2109836);
+    GMapPointOn(4, 439, 117, 100, 9187616);
+    FaceMove(0, 224, 220, 400, 2);
+    FaceDelete(0, 400);
+    WaitM(1750);
+    WaitForVMCThread();
+    FaceCreate(2, "FID_LAY", 224, 220, 400, 26639);
+    FaceMove(2, 244, 220, 400, 2);
+    TalkResume();
+    GMapCurveDraw("curve0306_1");
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0306");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+callback[Event.Turn](1, 1, 1) {
+    if (EvKeyRead()) {
+        set("gf_complete");
+    }
+}
+
+def anonfn20() {
+    EvDevStart("bmap0306", "bmap0306_mikata");
+    BlackOut();
+    MapLoad("bmap0306");
+    AddTT(18, 5, 20, 0, 0, 0);
+    SetTerrName(18, 5, "防衛");
+    #UnitNeverSallyByPID("PID_LAY");
+    #UnitNeverSallyByPID("PID_RETHE");
+    #UnitNeverSallyByPID("PID_LIRE");
+    #UnitNeverSallyByPID("PID_MORDY");
+    #UnitNeverSallyByPID("PID_KISA");
+    SallySetByGroupRank("bmap0306_mikata");
+    InstantDisposRank("bmap0306_mikata");
+    UnitForcedSallyByPID("PID_IKE");
+    UnitDontMoveSallyByPID("PID_IKE");
+    InstantDisposRank("bmap0306_teki");
+    v0 = 1;
+    v1 = ForceGetFirst(1);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        UnitRotate(v1, 8, 0);
+        v1 = v0;
+    }
+    InstantHeroFocus();
+}
+
+def Opening0() {
+    BlackOut();
+    if (EvKeyReadY()) {
+        anonfn15();
+    }
+    anonfn18();
+    ChapterTitle("C0306");
+    anonfn13();
+    DisposLoad("bmap0306");
+    JoinRank("bmap0306_rieusion", 5);
+    DisposFree("bmap0306");
+    DFSet_0306_OP0();
+}
+
+def Opening1() {
+    anonfn14();
+    anonfn20();
+    DFSet_0306_OP1();
+}
+
+def Opening2() {
+    WaitM(500);
+}
+
+callback[Event.Turn](1, 1, 0){
+    #set("gf_complete");
+}
+
+callback[Event.Turn](2, 2, 1) {
+    UnitFocusByPID_Wait("PID_LOMBROSO");
+    TalkEvent_Map("MS_0306_EV_01");
+}
+
+callback[Event.Turn](3, 3, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](4, 4, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](5, 5, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](6, 6, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](7, 7, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](8, 8, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](9, 9, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](10, 10, 0) {
+    anonfn25();
+    anonfn26();
+}
+
+callback[Event.Turn](11, 11, 0) {
+    Dispos("bmap0306_ed_rubale");
+    TalkEvent("MS_0306_ED_00");
+    set("gf_complete");
+}
+
+callback[Event.DieMap]("PID_IKE") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MDIE_IKE");
+}
+
+callback[Event.DieBattle]("PID_LOMBROSO", "", 1, "ボス会話") {
+    if (BossTalkExclusion("PID_IKE") || BossTalkExclusion("PID_RIEUSION")) {
+        return 0;
+    }
+    TalkEvent_BossBGM("MS_0306_BT", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話");
+}
+
+callback[Event.DieBattle]("PID_ZEPHIA", "", 1, "BTZEPHIA") {
+    TalkEvent_BossBGM("MS_0306_BT_ZEPHIA", "BGM_EVT_TALK_BOSS1");
+    set("BTZEPHIA");
+}
+
+callback[Event.DieBattle]("PID_GRISS", "", 1, "BTGRISS") {
+    TalkEvent_BossBGM("MS_0306_BT_GRISS", "BGM_EVT_TALK_BOSS1");
+    set("BTGRISS");
+}
+
+callback[Event.DieBattle]("PID_MARNI", "", 1, "BTMARNI") {
+    TalkEvent_BossBGM("MS_0306_BT_MARNI", "BGM_EVT_TALK_BOSS1");
+    set("BTMARNI");
+}
+
+callback[Event.DieBattle]("PID_MAUVIER", "", 1, "BTMAUVIER") {
+    TalkEvent_BossBGM("MS_0306_BT_MAUVIER", "BGM_EVT_TALK_BOSS1");
+    set("BTMAUVIER");
+}
+
+callback[Event.DieBattle]("PID_LOMBROSO", "PID_IKE", 1, "ボス会話アイク") {
+    TalkEvent_BossBGM("MS_0306_BT_IKE", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話アイク");
+}
+
+callback[Event.DieBattle]("PID_LOMBROSO", "PID_RIEUSION", 1, "ボス会話リュシオン") {
+    TalkEvent_BossBGM("MS_0306_BT_Egrett", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話リュシオン");
+}
+
+callback[Event.DieMap]("PID_LOMBROSO") {
+    TalkEvent_Die("MS_0306_DIE");
+    TalkEvent_Map("MS_0306_ED_00_BOSSDIE");
+    set("gf_complete");
+}
+
+callback[Event.DieMap]("PID_ZEPHIA") {
+    TalkEvent_Die("MS_0306_DIEZEPHIA");
+}
+
+callback[Event.DieMap]("PID_GRISS") {
+    TalkEvent_Die("MS_0306_DIEGRISS");
+}
+
+callback[Event.DieMap]("PID_MARNI") {
+    TalkEvent_Die("MS_0306_DIEMARNI");
+}
+
+callback[Event.DieMap]("PID_MAUVIER") {
+    TalkEvent_Die("MS_0306_DIEMAUVIER");
+}
+
+callback[0x1]("gf_complete") {
+    WaitM(250);
+    FadeOut(1500);
+    WaitM(750);
+    BGMFadeOut(0, 1500);
+    WaitM(1500);
+    AllUnitEscape();
+    MapFree();
+    FadeIn_Wait(500);
+    anonfn15();
+    TEAM_0306_ED();
+    DFSet_0306_ED();
+}
+
+callback[0xC]("") {
+    Achieve_CLEAR_BONUS(4000, 4000);
+    Achieve_TURN_BONUS(0, 0, 0, 0, 0, 0, 0, 0);
+    Achieve_LIVE_BONUS(0, 0);
+}
+
+callback[Event.TurnAfter](1, 1, 0) {
+    UnitFocusByPID("PID_LOMBROSO");
+    TalkEvent("MS_0306_LOMBROSOINTRO");
+    anonfn21();
+    anonfn22();
+    anonfn23();
+    anonfn24();
+    anonfn25();
+    anonfn26();
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        if ((UnitTstSkill(v1, "SID_ANIMALIZE"))) {
+            UnitFocus(v1);
+            UnitTransform(v1, 1);
+            UnitMoveWait();
+            UnitSet(v1, 8, 30);
+        }
+        v1 = v0;
+    }
+    v2 = UnitGetByPID("PID_IKE");
+    #UnitAddSkill(v2, "SID_MANTLE");
+    UnitFocusByPID(v2);
+}
+
+def anonfn21(){
+    if (!Normal()) {
+        DisposWarp("bmap0306_zhound01_h");
+    }
+    TalkEvent("MS_0306_ZEPHIAINTRO");
+}
+
+def anonfn22(){
+    if (!Normal()) {
+        DisposWarp("bmap0306_zhound02_h");
+    }
+    TalkEvent("MS_0306_GRISSINTRO");
+}
+
+def anonfn23(){
+    if (!Normal()) {
+        DisposWarp("bmap0306_zhound03_h");
+    }
+    TalkEvent("MS_0306_MARNIINTRO");
+}
+
+def anonfn24(){
+    if (!Normal()) {
+        DisposWarp("bmap0306_zhound04_h");
+    }
+    v4 = UnitGetByPID("PID_MAUVIER");
+    TalkEvent("MS_0306_MAUVIERINTRO");
+    v6 = EffectPlay("EID_BOON_CURE");
+    EffectUnit(v6, v4, 0, "shoulder");
+    WaitF(100);
+}
+
+def anonfn25(){
+    v1 = GetRnd(2);
+    if (v1 == 1 && (DisposUnitCheckByPID("PID_ZEPHIA"))) {
+        v2 = GetRnd(3);
+        if (v2 == 1){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound01_1_h");
+            }
+        }
+        if (v2 == 2){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound01_2_h");
+            }
+        }
+        if (v2 == 0){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound01_3_h");
+            }
+        }
+    }
+    if (v1 == 0 &&(DisposUnitCheckByPID("PID_GRISS"))) {
+        v3 = GetRnd(3);
+        if (v3 == 1){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound02_1_h");
+            }
+        }
+        if (v3 == 2){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound02_2_h");
+            }
+        }
+        if (v3 == 0){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound02_3_h");
+            }
+        }
+    }
+}
+
+def anonfn26(){
+    v4 = GetRnd(2);
+    if (v4 == 1 && (DisposUnitCheckByPID("PID_MARNI"))) {
+        v5 = GetRnd(3);
+        if (v5 == 1){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound03_1_h");
+            }
+        }
+        if (v5 == 2){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound03_2_h");
+            }
+        }
+        if (v5 == 0){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound03_3_h");
+            }
+        }
+    }
+    if (v4 == 0 && (DisposUnitCheckByPID("PID_MAUVIER"))) {
+        v6 = GetRnd(3);
+        if (v6 == 1){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound04_1_h");
+            }
+        }
+        if (v6 == 2){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound04_2_h");
+            }
+        }
+        if (v6 == 0){
+            if (!Normal()) {
+                DisposWarp("bmap0306_zhound04_3_h");
+            }
+        }
+    }
+}
+
+def anonfn30(){
+#callback[0x7]() {
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        v2 = 0;
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING1");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING2");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING3");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING4");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING5");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING6");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING7");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING8");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING1_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING2_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING3_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING4_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING5_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING6_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING7_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        v3 = UnitSearchItem(v1, "IID_ENGAGERING8_D");
+        if (0 <= v3) {
+            v2++;
+        }
+        if (v2 >= 2) {
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING1");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING1_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING2");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING2_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING3");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING3_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING4");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING4_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING5");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING5_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING6");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING6_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING7");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING7_D");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING8");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING8_D");
+            }
+        }
+        if (v2 < 2) {
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING1_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING1");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING2_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING2");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING3_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING3");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING4_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING4");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING5_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING5");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING6_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING6");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING7_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING7");
+            }
+            v3 = UnitSearchItem(v1, "IID_ENGAGERING8_D");
+            if (0 <= v3) {
+                DelItemsFromForce(v1, v3);
+                UnitAddItem(v1, "IID_ENGAGERING8");
+            }
+            v1 = v0;
+        }
+    }
+}
+
+#callback[Event.Turn](1, 1, 0) {
+#    set("gf_complete");
+#}

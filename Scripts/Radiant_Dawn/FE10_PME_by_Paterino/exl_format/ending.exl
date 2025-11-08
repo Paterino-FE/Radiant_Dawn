@@ -1,0 +1,193 @@
+include std:fe10:prelude;
+
+def anonfn0() {
+    RectPreLoad("RID_END_GR01");
+    DispPreLoadWholeForce(0);
+    DispPreLoadWholeForce(5);
+    DispPreLoadWholeForce(6);
+}
+
+def anonfn1(v0, v1, v2, v3, v4, v5, v6) {
+    RectBuild(v0);
+    RectSetPos(v0, v1, v2);
+    if (!(GCST() & 1)) {
+        RectFadeIn(v0, MSEC2FRAME(v3));
+    }
+    WaitM(v3);
+    WaitM(v4);
+    if (!(GCST() & 1)) {
+        RectFadeOut(v0, MSEC2FRAME(v5));
+    }
+    WaitM(v5);
+    RectKill(v0);
+    WaitM(v6);
+}
+
+def anonfn2(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) {
+    RectBuild(v0);
+    RectSetPos(v0, v2, v3);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v0, 0, 6, v2, v4, v8);
+        RectSetCurve(v0, 1, 6, v3, v5, v8);
+        RectFadeIn(v0, MSEC2FRAME(v8));
+    }
+    RectBuild(v1);
+    RectSetPos(v1, v6, v7);
+    if (!(GCST() & 1)) {
+        RectFadeIn(v1, MSEC2FRAME(v9));
+    }
+    WaitM(v9);
+    WaitM(v10);
+    if (v13) {
+        BGMFadeOut(1, (v11 + v12) + 2000);
+    }
+    if (!(GCST() & 1)) {
+        RectFadeOut(v0, MSEC2FRAME(v11));
+        RectFadeOut(v1, MSEC2FRAME(v11));
+    }
+    WaitM(v11);
+    RectKill(v0);
+    RectKill(v1);
+    WaitM(v12);
+}
+
+def anonfn3() {
+    v0 = "RID_END_COPYRIGHT";
+    RectBuild(v0);
+    RectSet(v0, 0, 304);
+    RectSet(v0, 1, 448);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v0, 1, 0, 448, 144, 10500);
+    }
+    WaitM(10500);
+    WaitM(4000);
+    if (!(GCST() & 1)) {
+        RectFadeOut(v0, 3000);
+    }
+    WaitM(3000);
+    RectKill(v0);
+    WaitM(3000);
+}
+
+def anonfn4() {
+    v0 = "RID_END_FIN_BG";
+    v1 = "RID_END_FIN";
+    RectBuild(v0);
+    RectSet(v0, 9, 0);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v0, 9, 0, 0, 255, 3000);
+    }
+    WaitM(3000);
+    WaitM(3000);
+    RectBuild(v1);
+    RectSet(v1, 9, 0);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v1, 9, 0, 0, 255, 3000);
+        RectSetCurve(v0, 10, 5, 128, 32, 3000);
+    }
+    WaitM(3000);
+    BGMFadeOut(2, 2000);
+    WaitM(2000);
+    if (!(GCST() & 1)) {
+        WaitAnyKey();
+    }
+    if (!(GCST() & 1)) {
+        RectFadeOut(v0, 3000);
+        RectFadeOut(v1, 3000);
+    }
+    WaitM(3000);
+    RectKill(v0);
+    RectKill(v1);
+}
+
+def anonfn5(v0, v1, v2, v3, v4) {
+    RectBuild(v0);
+    RectSet(v0, 0, 540);
+    RectSet(v0, 1, 60);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v0, 9, 0, 0, 255, v1);
+    }
+    WaitM(v1);
+    WaitM(v2);
+    if (!(GCST() & 1)) {
+        RectSetCurve(v0, 9, 0, 255, 0, v3);
+    }
+    WaitM(v3);
+    RectKill(v0);
+    WaitM(v4);
+}
+
+def Ending() {
+    DisableSkip();
+    BGMPlay(1, "BGM_ED_STAFF1");
+    anonfn0();
+    RectBuild("RID_MASK");
+    Fade(0, 0);
+    WaitM(4000);
+    anonfn1("RID_END_STAFFCREDIT", 304, 208, 3000, 1666, 3000, 200);
+    WaitM(1000);
+    anonfn1("RID_END_SATORUIWATA", 304, 181, 3000, 5000, 3000, 200);
+    anonfn1("RID_END_THORUNARIHIRO", 304, 181, 3000, 5000, 3000, 200);
+    anonfn1("RID_END_HITOSHIYAMAGAMI", 304, 181, 3000, 5000, 3000, 200);
+    anonfn1("RID_END_KENTARONISHIMURA", 304, 181, 3000, 5000, 3000, 200);
+    WaitM(1000);
+    anonfn2("RID_END_GR01", "RID_END_LBL01", 368, 0, 304, 0, 40, 172, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR02", "RID_END_LBL02", negate(64), 0, 0, 0, 336, 172, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR03", "RID_END_LBL03", 0, negate(48), 0, 0, 304, 324, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR04", "RID_END_LBL04", 0, 256, 0, 208, 304, 100, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR05", "RID_END_LBL05", negate(64), 0, 0, 0, 350, 172, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR06", "RID_END_LBL06", 368, 0, 304, 0, 40, 172, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR07", "RID_END_LBL07", 0, negate(48), 0, 0, 304, 324, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR08", "RID_END_LBL08", 386, 220, 322, 220, 48, 48, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR09", "RID_END_LBL09", -24, 40, 40, 40, 320, 222, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR10", "RID_END_LBL10", 386, 40, 322, 40, 48, 148, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR11", "RID_END_LBL11", -24, 40, 40, 40, 320, 48, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR12", "RID_END_LBL12", 386, 40, 322, 40, 56, 132, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR13", "RID_END_LBL13", -24, 226, 40, 226, 320, 48, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR14", "RID_END_LBL14", 386, 40, 322, 40, 48, 24, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR15", "RID_END_LBL15", -24, 40, 40, 40, 348, 132, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR16", "RID_END_LBL16", 386, 226, 322, 226, 48, 48, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR17", "RID_END_LBL17", -24, 226, 40, 226, 276, 32, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR18", "RID_END_LBL18", 386, 40, 322, 40, 44, 64, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR19", "RID_END_LBL19", 386, 220, 322, 220, 40, 48, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR20", "RID_END_LBL20", -24, 40, 40, 40, 348, 20, 3000, 4000, 5000, 2000, 200, 0);
+    anonfn2("RID_END_GR21", "RID_END_LBL21", 386, 40, 322, 40, 56, 20, 3000, 4000, 5000, 2000, 200, 0);
+    RectPreLoad("RID_END_LYRIC01");
+    anonfn2("RID_END_GR22", "RID_END_LBL22", -24, 40, 40, 40, 432, 356, 3000, 4000, 5000, 2000, 200, 1);
+    RectPreLoad("RID_END_FIN_BG");
+    RectPreLoad("RID_END_FIN");
+    WaitM(2500);
+    Comeback();
+    BGMPlay(2, "BGM_ED_SONG1");
+    WaitM(650);
+    StaffRoll(200000);
+    anonfn5("RID_END_LYRIC01", 250, 4300, 250, 0);
+    anonfn5("RID_END_LYRIC02", 250, 5000, 250, 0);
+    anonfn5("RID_END_LYRIC03", 250, 5200, 250, 0);
+    anonfn5("RID_END_LYRIC04", 250, 6000, 250, 25500);
+    anonfn5("RID_END_LYRIC05", 250, 10500, 250, 0);
+    anonfn5("RID_END_LYRIC06", 250, 11000, 250, 300);
+    anonfn5("RID_END_LYRIC07", 250, 9200, 250, 500);
+    anonfn5("RID_END_LYRIC08", 250, 13500, 250, 800);
+    anonfn5("RID_END_LYRIC09", 250, 9700, 250, 0);
+    anonfn5("RID_END_LYRIC10", 250, 10000, 250, -100);
+    anonfn5("RID_END_LYRIC11", 250, 5900, 250, 4500);
+    anonfn5("RID_END_LYRIC12", 250, 6700, 250, 0);
+    WaitM(59000);
+    anonfn3();
+    Fade(0, 0);
+    anonfn4();
+    WaitM(1000);
+    Comeback();
+    BGMPlay(1, "BGM_ED_SCORE1");
+    WarRecord(15000);
+    Comeback();
+    DispLoadWholeForce(0);
+    DispLoadWholeForce(5);
+    DispLoadWholeForce(6);
+    IndividualWarRecord(15000);
+    BGMFadeOut(1, 2000);
+    WaitM(2000);
+    RectKill("RID_MASK");
+}
+

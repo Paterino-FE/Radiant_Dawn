@@ -1,0 +1,830 @@
+include std:fe10:prelude;
+
+callback[0x4](19, 5, 19, 5, 0, "埋宝１") {
+    GetRndTreasure("IID_COIN", "埋宝１");
+    AddTT(19, 5, 21, 0, 0, 0);
+}
+
+callback[0x4](20, 19, 20, 19, 0, "埋宝２") {
+    GetRndTreasure("IID_COIN", "埋宝２");
+}
+
+#callback[0x4](10, 19, 10, 19, 0, "PITALL1") {
+#    SetTerrData(10, 19, "穴");
+#    set("PITALL1");
+#}
+
+#def anonfn2() {
+    #SetPit(10, 19);
+    #AddTT(9, 19, 21, 0, 0, 0);
+    #SetTerrData(10, 19, "穴");
+#}
+
+#def anonfn3() {
+#    SetPit(10, 20);
+#    AddTT(9, 20, 9, 0, 0, 0);
+    #SetTerrData(10, 20, "穴");
+#}
+
+#callback[Event.DieBattle]("PID_SMSLEEP", "PID_CALILL", 1, "SMSLEEP") {
+#    DisableSkip();
+#    anonfn07();
+#    TalkEvent_BossBGM("MS_0310_BT", "BGM_EVT_TALK_BOSS1");
+#    EnableSkip();
+#}
+
+#def anonfn07() {
+#    if (BMGetPhase() == 1) {
+#        v1 = MindGetMe();
+#        v2 = UnitSearchItem(v1, "IID_SLEEPSWORD");
+#        if (v2 == UnitGetEquipWepI(v1)) {
+#            UnitAddSkill(v1, "SID_DEADEYE");
+#            UnitAddItem(v1, "IID_SKILLSCROLL100");
+#        }
+#        goto l3;
+#    }
+#    if (BMGetPhase() == 0) {
+#        v1 = MindGetTarget();
+#        v2 = UnitSearchItem(v1, "IID_SLEEPSWORD");
+#        if (v2 == UnitGetEquipWepI(v1)) {
+#            UnitAddSkill(v1, "SID_DEADEYE");
+#            UnitAddItem(v1, "IID_SKILLSCROLL100");
+#        }
+#    }  
+#    label l3;
+#}
+
+#callback[0x7]() {
+#    v5 = 1;
+#    v6 = ForceGetFirst(1);
+#    while (v5 != 0) {
+#        v5 = UnitGetNext(v6);
+#        UnitClrSkill(v6, "SID_DEADEYE");
+#        UnitDelItem(v6, "IID_SKILLSCROLL100");
+#        v6 = v5;
+#    }
+#}
+
+def BuildEventFlame() {
+    v0 = BuildInstGetX(EventGetX(), EventGetY());
+    v1 = BuildInstGetY(EventGetX(), EventGetY());
+    BuildInstTorch(v0, v1, 5, 300);
+    SetBomber(v0, v1, 5);
+}
+
+def BuildEventExtinction() {
+    v0 = BuildInstGetX(EventGetX(), EventGetY());
+    v1 = BuildInstGetY(EventGetX(), EventGetY());
+    BuildInstExtinction(v0, v1, 300);
+    ClrTT(v0, v1, 15);
+}
+
+callback[Event.Poke](13, 16, 9, "訪問1") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_01");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問1");
+    set("FlameA");
+}
+
+callback[Event.Poke](18, 16, 9, "訪問2") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_02");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問2");
+    set("FlameB");
+}
+
+callback[Event.Poke](7, 7, 9, "訪問3") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_03");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問3");
+    set("FlameC");
+}
+
+callback[Event.Poke](12, 8, 9, "訪問4") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_04");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問4");
+    set("FlameD");
+}
+
+callback[Event.Poke](16, 8, 9, "訪問5") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_05");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問5");
+    set("FlameE");
+}
+
+callback[Event.Poke](22, 8, 9, "訪問6") {
+    v0 = MindGetMe();
+    VisitIn(v0, EventGetX(), EventGetY());
+    TalkEvent_Visit("MS_0310_VIL_06");
+    VisitOut(v0, EventGetX(), EventGetY());
+    BuildEventFlame();
+    set("訪問6");
+    set("FlameF");
+}
+
+callback[Event.Poke](14, 15, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](13, 15, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](12, 15, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](12, 14, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](13, 14, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](14, 14, 55, "FlameA") {
+    BuildEventFlame();
+    set("FlameA");
+}
+
+callback[Event.Poke](17, 14, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](18, 14, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](19, 14, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](17, 15, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](18, 15, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](19, 15, 55, "FlameB") {
+    BuildEventFlame();
+    set("FlameB");
+}
+
+callback[Event.Poke](6, 5, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](7, 5, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](8, 5, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](6, 6, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](7, 6, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](8, 6, 55, "FlameC") {
+    BuildEventFlame();
+    set("FlameC");
+}
+
+callback[Event.Poke](11, 6, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](12, 6, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](13, 6, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](11, 7, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](12, 7, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](13, 7, 55, "FlameD") {
+    BuildEventFlame();
+    set("FlameD");
+}
+
+callback[Event.Poke](15, 6, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](16, 6, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](17, 6, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](15, 7, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](16, 7, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](17, 7, 55, "FlameE") {
+    BuildEventFlame();
+    set("FlameE");
+}
+
+callback[Event.Poke](21, 6, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+callback[Event.Poke](22, 6, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+callback[Event.Poke](23, 6, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+callback[Event.Poke](21, 7, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+callback[Event.Poke](22, 7, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+callback[Event.Poke](23, 7, 55, "FlameF") {
+    BuildEventFlame();
+    set("FlameF");
+}
+
+def RegistLocationFlags() {
+    regist("FlameA");
+    regist("ExtinA");
+    regist("FlameB");
+    regist("FlameC");
+    regist("FlameD");
+    regist("FlameE");
+    regist("FlameF");
+    regist("ExtinB");
+    regist("ExtinC");
+    regist("ExtinD");
+    regist("ExtinE");
+    regist("ExtinF");
+    regist("埋宝１");
+    regist("埋宝２");
+    regist("訪問1");
+    regist("訪問2");
+    regist("訪問3");
+    regist("訪問4");
+    regist("訪問5");
+    regist("訪問6");
+    regist("PITFALL1");
+}
+
+def RegistLocationTT() {
+    anonfn2();
+    anonfn3();
+}
+
+def RegistBaseTalkFlags() {
+    regist("拠点会話_街の人々");
+    regist("拠点会話_カリルの店");
+    regist("拠点会話_エリンシア");
+    regist("拠点会話_ルキノ");
+}
+
+#callback[0xE]("街の人々", "拠点会話_街の人々") {
+#    if (Check()) {
+#        if (0) {
+#            return 0;
+#        }
+#        return 1;
+#        goto l2;
+#    }
+#    TalkEvent_Important("MID_0310_街の人々会話");
+#    if (IsConversationRoom()) {
+#        return 0;
+#    }
+#    set("拠点会話_街の人々");
+#    label l2;
+#}
+
+#callback[0xE]("カリルの店", "拠点会話_カリルの店") {
+#    if (Check()) {
+#        if ((((!UnitCheckReadyToBaseTalkByPID("PID_CALILL") || !UnitCheckReadyToBaseTalkByPID("PID_MAKAROV")) || !UnitCheckReadyToBaseTalkByPID("PID_MARCIA")) || !UnitCheckReadyToBaseTalkByPID("PID_STELLA")) || 0) {
+#            return 0;
+#        }
+#        return 1;
+#        goto l6;
+#    }
+#    TalkEvent_Important("MID_0310_カリルの店会話");
+#    if (IsConversationRoom()) {
+#        return 0;
+#    }
+#    if (UnitCheckPlayerOrAbsentByPID("PID_CALILL")) {
+#        UnitGetItemShowing(UnitGetByPID("PID_CALILL"), "IID_HOLYWATER");
+#    }
+#    set("拠点会話_カリルの店");
+#    label l6;
+#}
+
+callback[0xE]("エリンシア", "拠点会話_エリンシア") {
+    if (Check()) {
+        if ((!UnitCheckLiveOrPartyForBaseTalkByPID("PID_ERINCIA") || !UnitCheckPlayerOrAbsentByPID("PID_GEOFFRAY")) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0310_エリンシア会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    if (UnitCheckPlayerOrAbsentByPID("PID_GEOFFRAY")) {
+        UnitGetItemShowing(UnitGetByPID("PID_GEOFFRAY"), "IID_MASTERCROWN");
+    }
+    set("拠点会話_エリンシア");
+    label l4;
+}
+
+callback[0xE]("ルキノ", "拠点会話_ルキノ") {
+    if (Check()) {
+        if ((!UnitCheckReadyToBaseTalkByPID("PID_GEOFFRAY") || !UnitCheckLiveOrPartyForBaseTalkByPID("PID_LUCHINO")) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0310_ルキノ会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    MindGetMoney(10000);
+    set("拠点会話_ルキノ");
+    label l4;
+}
+
+def anonfn83() {
+    BGM1Start("BGM_EVT_3_10_A");
+    ENV1Start("SFX_ENV_0310_CRIMEA1");
+    TalkEvent("MS_0310_OP_01_T");
+    ENV1FadeOut_Fast();
+    ENV2Start("SFX_ENV_0310_CRIMEA_ROOM1");
+    TalkEvent("MS_0310_OP_01");
+    ENV2FadeOut();
+    BGM1FadeOut_Wait();
+}
+
+def anonfn84() {
+    BlackOut();
+    REventStart("bmap0310", 1);
+    Dispos("bmap0310_op01_c");
+    InstantUnitFocusByPID("PID_RAO");
+    TelopInFast("EID_T0310A");
+    BGM1Start("BGM_EVT_3_10_B");
+    FadeIn(500);
+    TelopWait();
+    TalkEvent("MS_0310_OP2");
+    v0 = UnitGetByPos(18, 8);
+    UnitMovePos(v0, 11, 9);
+    WaitM(400);
+    DisposAsynchronous("bmap0310_op01_02_c");
+    WaitM(1400);
+    UnitPosRotateByPID("PID_RAO", 20, 10, negate(1));
+    TalkEvent("MS_0310_OP2_02");
+    v1 = UnitGetByPos(20, 10);
+    UnitMovePos(v1, 11, 12);
+    TalkResume();
+    FadeOut_Wait(500);
+    REventEnd(1, 1);
+    BGM1VolumeDown();
+    ENV1Start("SFX_ENV_0310_WIND2");
+    TalkEvent("MS_0310_OP3");
+    ENV1FadeOut();
+    BGM1FadeOut_Wait();
+}
+
+def anonfn85() {
+    BlackOut();
+    BGM1Start("BGM_EVT_3_10_C");
+    ENV1Start("SFX_ENV_0310_TOWN_WIND2");
+    TalkEvent("MS_0310_ED_02");
+    ENV1FadeOut_Slow();
+    BGM1FadeOut_Slow_Wait();
+    ENV1Start("SFX_ENV_0310_CRIMEA1");
+    TalkEvent("MS_0310_ED_03_T");
+    ENV1FadeOut();
+    BGM1Start("BGM_EVT_3_10_D");
+    ENV1Start("SFX_ENV_0310_CRIMEA_ROOM1");
+    TalkEvent("MS_0310_ED_03");
+    BGM1FadeOut_Slow();
+    TalkResume();
+    BGM2Start("BGM_EVT_3_10_E");
+    TalkResume();
+    ENV1FadeOut();
+    BGM2FadeOut_Wait();
+}
+
+def Startup() {
+    regist("ボス会話");
+    regist("SMSLEEP");
+    regist("ボス会話ジョフレ");
+    RegistLocationFlags();
+    RegistBaseTalkFlags();
+}
+
+def gmap0310_dheginhansea() {
+    WaitM(2500);
+    FaceCreate(1, "FID_DHEGINHANSEA", 100, 310, 400, 26639);
+}
+
+def anonfn88() {
+    if (!IsGMapPointEnable(3)) {
+        GMapPointOff(1);
+        GMapPointOn(3, 264, 188, 100, 9187616);
+    }
+}
+
+def gmap0310_point_chg() {
+    WaitM(5500);
+    anonfn88();
+}
+
+def anonfn90() {
+    BlackOut();
+    GMapBuild("GID_0310");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0310");
+    GMapMove(512, 380, 5937, 5894, 0, 0);
+    GMapCurveEntry("curve0310_1");
+    FacePreLoad("FID_DHEGINHANSEA");
+    FacePreLoad("FID_IKE");
+    FacePreLoad("FID_NASIR");
+    FacePreLoad("FID_ENA");
+    FacePreLoad("FID_ERINCIA");
+    FacePreLoad("FID_VALTELOME");
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    GMapMove(402, 500, 10000, 9920, 150, 2);
+    WaitF(150);
+    GMapFlagMarkOn(0, 90, 242, 7, 0);
+    GMapRegionOn(0, "EID_TERRITORY_GOLDOA");
+    TalkEvent("MS_0310_GMAP_01");
+    GMapFlagMarkOff(0);
+    GMapRegionOff(0);
+    WaitM(1000);
+    FaceCreate(0, "FID_IKE", 282, 165, 400, 26638);
+    GMapPointOn(0, 177, 226, 100, 2109836);
+    CreateVMCThread("gmap0310_dheginhansea");
+    TalkResume();
+    WaitM(1500);
+    FaceCreate(2, "FID_ENA", 385, 320, 400, 26638);
+    FaceCreate(3, "FID_NASIR", 300, 310, 400, 26638);
+    TalkResume();
+    GMapCurveDraw("curve0310_1");
+    TalkResume();
+    KillAllVMCThread();
+    GMapCurveDispOnOff("curve0310_1", 0);
+    GMapPointOff(0);
+    FaceDelete(0, 400);
+    FaceDelete(1, 400);
+    FaceDelete(2, 400);
+    FaceDelete(3, 400);
+    WaitM(1500);
+    GMapMove(402, 323, 10000, 9920, 150, 0);
+    WaitF(150);
+    GMapPointOn(1, 304, 210, 100, 9187616);
+    GMapPointOn(2, 266, 238, 100, 9187616);
+    TalkEvent("MS_0310_GMAP_02");
+    FaceCreate(0, "FID_VALTELOME", 422, 210, 400, 26638);
+    CreateVMCThread("gmap0310_point_chg");
+    TalkResume();
+    KillAllVMCThread();
+    anonfn88();
+    GMapPointOn(4, 234, 103, 100, 2133041);
+    FaceCreate(1, "FID_ERINCIA", 140, 160, 400, 26639);
+    TalkResume();
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0310");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+callback[Event.Turn](1, 1, 1) {
+    if (EvKeyRead()) {
+        set("gf_complete");
+    }
+}
+
+def anonfn25(){
+    TeamTransferPID("PID_LUCHINO", 5);
+    TeamTransferPID("PID_NEALUCHI", 5);
+    TeamTransferPID("PID_LEARNE", 5);
+    DumpUnit();
+}
+
+
+def anonfn27(){
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        UnitAddSkill(v1, "SID_PARAGON");
+        v1 = v0;
+    }
+    v2 = UnitGetByPID("PID_MAKAROV");
+    UnitClrSkill(v2, "SID_PARAGON");
+}
+
+def anonfn28(){
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        UnitClrSkill(v1, "SID_PARAGON");
+        v1 = v0;
+    }
+    v2 = UnitGetByPID("PID_LEARNE");
+    UnitAddSkill(v2, "SID_PARAGON");
+}
+
+def anonfn92() {
+    DumpUnit();
+    BlackOut();
+    EvDevStart("bmap0310", "bmap0310_mikata");
+    MapLoad("bmap0310");
+    v0 = UnitGetByPID("PID_GEOFFRAY");
+    if (!UnitTstSkill(v0, "SID_HERO")) {
+        UnitAddSkill(v0, "SID_HERO");
+    }
+    SallySetByGroupRank("bmap0310_mikata");
+    InstantDisposRank("bmap0310_mikata");
+    v1 = 1;
+    v2 = ForceGetFirst(0);
+    while (v1 != 0) {
+        v1 = UnitGetNext(v2);
+        UnitRotate(v2, 2, 0);
+        v2 = v1;
+    }
+    UnitForcedSallyByPID("PID_GEOFFRAY");
+    UnitDontMoveSallyByPID("PID_GEOFFRAY");
+    InstantDisposRank("bmap0310_teki");
+    #InstantDisposRank("bmap0310_ki");
+    UnitLooksChange(UnitGetByPID("PID_LUCHINO"), 0);
+    InstantHeroFocus();
+    FadeIn_Wait(500);
+}
+
+def Opening0() {
+    BlackOut();
+    if (EvKeyReadY()) {
+        anonfn85();
+    }
+    anonfn90();
+    ChapterTitle("C0310");
+    anonfn83();
+    anonfn25();
+    BlackOut();
+}
+
+def Opening1() {
+    anonfn84();
+    anonfn92();
+}
+
+def Opening2() {
+    WaitM(500);
+}
+
+callback[Event.Turn](1, 1, 1) {
+    UnitFocusTalkByPID("MS_0310_EV_01", "PID_RAO");
+    UnitFocusByPID("PID_GEOFFRAY");
+    TalkResume();
+    #set("gf_complete");
+}
+
+callback[Event.Turn](2, 2, 0) {
+    #UnitFocusTalkByPID("MS_0310_EV_02", "PID_GEOFFRAY");
+}
+
+callback[Event.Turn](2, 2, 0) {
+    v0 = ForceGetFirst(3);
+    while (v0) {
+        if (UnitQueryPID(v0, "PID_CRIMEALKNIGHT2")) {
+            UnitSetCpAttackSeq(v0, "SEQ_ATK100_OR_NEARESTTORCHMOVE");
+            UnitSetCpMoveSeq(v0, "SEQ_NEARESTTORCHMOVE_OR_NEARESTUNITMOVE");
+        }
+        v0 = UnitGetNext(v0);
+    }
+}
+
+callback[Event.Turn](3, 3, 0) {
+    DisposRank("bmap0310_z00");
+}
+
+callback[Event.Turn](4, 4, 0) {
+    DisposRank("bmap0310_z01");
+}
+
+callback[Event.Turn](6, 6, 0) {
+    DisposRank("bmap0310_z03");
+}
+
+callback[Event.Turn](7, 7, 0) {
+    DisposRank("bmap0310_z02");
+}
+
+callback[Event.Turn](8, 8, 0) {
+    DisposRank("bmap0310_z00");
+}
+
+callback[Event.Turn](9, 9, 0) {
+    DisposRank("bmap0310_z03");
+}
+
+callback[Event.Turn](10, 10, 0) {
+    if (!Normal()) {
+        Dispos("bmap0310_z04_h");
+    }
+}
+
+callback[Event.DieMap]("PID_GEOFFRAY") {
+    set("gf_gameover");
+    #if (UnitCheckLiveByPID("PID_KEVIN")) {
+    #    LocalDieTalkWithBgmChange("Hero", "MS_0310_DIE_GEOFFRAY");
+    #    goto l1;
+    #}
+    #LocalDieTalkWithBgmChange("Hero", "MS_0310_DIE_GEOFFRAY_B");
+    #label l1;
+}
+
+callback[Event.DieBattle]("PID_RAO", "", 1, "ボス会話") {
+    #if (BossTalkExclusion("PID_GEOFFRAY")) {
+    #    return 0;
+    #}
+    TalkEvent_BossBGM("MS_0310_BT", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話");
+}
+
+#callback[Event.DieBattle]("PID_RAO", "PID_GEOFFRAY", 1, "ボス会話ジョフレ") {
+#    TalkEvent_BossBGM("MS_0310_BT_GEOFFRAY", "BGM_EVT_TALK_BOSS1");
+#    set("ボス会話ジョフレ");
+#}
+
+callback[Event.DieMap]("PID_RAO") {
+    TalkEvent_Die("MS_0310_DIE");
+}
+
+callback[0x7]() {
+    if (DisposUnitCheckByPID("PID_RAO")) {
+        goto l1;
+    }
+    if (((((get("FlameA") == 1 && get("FlameB") == 1) && get("FlameC") == 1) && get("FlameD") == 1) && get("FlameE") == 1) && get("FlameF") == 1) {
+        anonfn28();
+        set("gf_complete");
+    }
+    label l1;
+}
+
+callback[0x1]("gf_complete") {
+    #UnitFocusTalkByPID("MS_0310_ED_01", "PID_GEOFFRAY");
+    v0 = UnitGetByPID("PID_GEOFFRAY");
+    UnitClrSkill(v0, "SID_HERO");
+    FadeOut(1500);
+    WaitM(750);
+    BGMFadeOut(0, 1500);
+    WaitM(1500);
+    AllUnitEscape();
+    MapFree();
+    FadeIn_Wait(500);
+    anonfn85();
+    #TEAM_0310_ED();
+    UnitTransferToForceALL(5, 9);
+    v3 = [
+        "PID_ERINCIA", "PID_GEOFFRAY", "PID_KEVIN", "PID_STELLA", 
+        "PID_MAKAROV", "PID_CALILL", "PID_MARCIA", "PID_WUHALADA", 
+        "PID_LUCHINO", "PID_LEARNE", "PID_NEALUCHI", 
+    ];
+    v1 = ForceGetFirst(9);
+    while (v1) {
+        v0 = UnitGetNext(v1);
+        v2 = 0;
+        while (v2 < 11) {
+            TeamCheckTransferPID(v1, v3[v2], 5);
+            v2++;
+        }
+        v1 = v0;
+    }
+    DumpUnit();
+}
+
+callback[0xC]("") {
+    Achieve_CLEAR_BONUS(9000, 9000);
+    Achieve_TURN_BONUS(3000, 1500, 10, 15, 3000, 1500, 10, 15);
+    Achieve_LIVE_BONUS(0, 0);
+    #v0 = 6;
+    #v1 = GetTTCount(6);
+    #v2 = GetTTCount(37);
+    #v3 = (v0 - v1) - v2;
+    #Achieve_EVENT_BONUS("MS_ACH_VIL_G", 1000 * v3, 6000, 1000 * v3, 6000);
+    #Achieve_EVENT_BONUS("MS_ACH_VIL_F", 100 * v1, 600, 100 * v1, 600);
+}
+
+
+callback[Event.TurnAfter](1, 1, 0) {
+    UnitLooksChange(UnitGetByPID("PID_LUCHINO"), 0);
+    SetTerrData(20, 19, "茂み");
+    SetTerrData(21, 15, "茂み");
+    SetTerrData(14, 11, "茂み");
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        if ((UnitTstSkill(v1, "SID_ANIMALIZE"))) {
+            UnitFocus(v1);
+            UnitTransform(v1, 1);
+            UnitMoveWait();
+            UnitSet(v1, 8, 30);
+        }
+        v1 = v0;
+    }
+    anonfn27();
+}
+
+#callback[Event.Turn](1, 1, 0) {
+#    set("gf_complete");
+#}

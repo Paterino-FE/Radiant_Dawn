@@ -1,0 +1,844 @@
+include std:fe10:prelude;
+
+@Suffix(0x79, 0x50, 0x6F)
+@Unknown(0x61)
+def anonfn0() {
+    UnitFocusOff();
+    v0 = MindGetMe();
+    if (v0) {
+        UnitFadeOut();
+        if (UnitGetY(v0) < 16) {
+            UnitMoveDir(v0, "6");
+            goto l2;
+        }
+        UnitMoveDir(v0, "2");
+        label l2;
+        UnitMoveWait();
+        UnitFadeOff();
+        TalkEvent_Map("MS_0201_KD_LEARNE");
+        set("gf_gameover");
+    }
+}
+
+@Unknown(0x61)
+def anonfn1() {
+    BGM1Start("BGM_EVT_2_1_A");
+    ENV1Start("SFX_ENV_0201_CASTLE1");
+    TalkEvent("MS_0201_OP_01");
+    ENV1FadeOut_Wait();
+    Interval();
+    BGM1FadeOut_Slow();
+    anonfn2();
+    Interval();
+    anonfn3();
+}
+
+@Unknown(0x45)
+def anonfn2() {
+    TelopInFast("EID_T0201A");
+    REventStart("emap0201a", 1);
+    InstantDispos("emap0201a_op01_c");
+    ENV1Start("SFX_ENV_0201_WIND1_OP");
+    CameraSet(41, 5023, 1600, 2344, 1734, 0);
+    CameraMove(41, 5023, 1600, 1607, 1702, 0, 3000);
+    FadeIn(500);
+    CameraMoveWait(0);
+    TalkEvent("MS_0201_OP_02");
+    Dispos("emap0201a_op02_c");
+    DisposWait();
+    FadeOut_Wait(500);
+    REventEnd(1, 1);
+    BGM1Start("BGM_EVT_2_1_B");
+    TalkEvent("MS_0201_OP_02_01");
+    ENV1FadeOut_Slow();
+    BGM1FadeOut_Slow_Wait();
+}
+
+@Suffix(0x64)
+@Unknown(0x65)
+def anonfn3() {
+    REventStart("bmap0201", 1);
+    InstantDisposRank("bmap0201_teki");
+    InstantDisposRank("bmap0201_mikata2");
+    ForceRotatePID(1, "PID_NEALUCHI", negate(1));
+    UnitMoveWait();
+    CameraSet(0, 3516, 1600, 458, 126, 0);
+    FadeIn_Wait(1500);
+    Dispos("bmap0201_op01_c");
+    WaitM(1000);
+    Dispos("bmap0201_op02_c");
+    TalkEvent("MS_0201_OP_03");
+    UnitRotateByPID("PID_ERINCIA", 9, negate(1));
+    UnitMoveWait();
+    TalkResume();
+    UnitSeeByPID("PID_ERINCIA", "PID_NEALUCHI");
+    UnitMoveWait();
+    CameraMove(0, 3516, 1600, 1660, 1361, 0, 2000);
+    CameraMoveWait(0);
+    UnitRotateByPID("PID_NEALUCHI", 8, negate(1));
+    UnitMoveWait();
+    BGM1Start("BGM_EVT_2_1_C");
+    TalkEvent("MS_0201_OP_04");
+    CameraMove(0, 3516, 1600, 1981, 1856, 0, 1000);
+    CameraMoveWait(0);
+    TalkResume();
+    CameraMove(0, 3516, 1600, 1660, 1361, 0, 1000);
+    CameraMoveWait(0);
+    TalkResume();
+    #UnitTransform(UnitGetByPID("PID_NEALUCHI"), 1);
+    UnitMoveWait();
+    TalkResume();
+    ForceRotatePos(1, 12, 11, negate(1));
+    UnitPosRotateByPID("PID_NEALUCHI", 12, 11, negate(1));
+    CameraMove(0, 3516, 1600, 1358, 988, 0, 1000);
+    UnitWalkDir(6);
+    UnitMovePosByPID("PID_ERINCIA", 10, 11);
+    UnitMovePosByPID("PID_MARCIA", 11, 10);
+    UnitWalkDir(0);
+    UnitMoveWait();
+    CameraMoveWait(0);
+    TalkEvent("MS_0201_OP_05");
+    UnitWalkDir(6);
+    UnitMovePosByPID("PID_ERINCIA", 12, 11);
+    UnitWalkDir(0);
+    UnitMoveWait();
+    TalkResume();
+    FadeOut_Wait(1500);
+    REventEnd(1, 1);
+    BGM1FadeOut_Wait();
+}
+
+@Unknown(0x42)
+def anonfn4() {
+    v0 = ForceGetCount(1);
+    printf("  残り赤軍num=%d", v0);
+    if (UnitCheckLiveByPID("PID_ZEFFREN")) {
+        if (v0 > 1) {
+            UnitFocusTalkByPID("MS_0201_ED_01_A", "PID_ZEFFREN");
+            goto l2;
+        }
+        UnitFocusTalkByPID("MS_0201_ED_01_C", "PID_ZEFFREN");
+        label l2;
+        goto l3;
+    }
+    if (v0) {
+        TalkEvent_Map("MS_0201_ED_01_B");
+    }
+    label l3;
+    anonfn5();
+    if (!UnitFocusTalkByPID("MS_0201_ED_02_A", "PID_MARCIA")) {
+        UnitFocusTalkByPID("MS_0201_ED_02_B", "PID_ERINCIA");
+    }
+    FadeOut(1500);
+    BGMFadeOut(0, 1500);
+    WaitM(1500);
+    AllUnitEscape();
+    MapFree();
+    Interval();
+    ENV1Start("SFX_ENV_0201_WIND1_ED");
+    BGM1Start("BGM_EVT_2_1_E");
+    TalkEvent("MS_0201_ED_03");
+    BGM1FadeOut_Wait();
+    ENV1FadeOut_Fast();
+}
+
+@Suffix(0x6E, 0x0, 0x62)
+@Unknown(0x44)
+def anonfn5() {
+    UnitFadeOut();
+    UnitFocusOff();
+    v0 = UnitGetByPID("PID_LEARNE");
+    v1 = UnitGetParent(v0);
+    if (v1 != 0) {
+        UnitDropOff(v1, negate(1));
+    }
+    v2 = 1;
+    v3 = ForceGetFirst(1);
+    while (v2 != 0) {
+        v2 = UnitGetNext(v3);
+        printf("  赤軍撤退ui=%d", v3);
+        if (v3 != 0) {
+            UnitMoveRoute(v3, "27,15");
+        }
+        v3 = v2;
+    }
+    UnitMoveWait();
+    v2 = 1;
+    v3 = ForceGetFirst(1);
+    while (v2 != 0) {
+        v2 = UnitGetNext(v3);
+        printf("  赤軍離脱ui=%d", v3);
+        if (v3 != 0) {
+            UnitEscape(v3);
+        }
+        v3 = v2;
+    }
+    UnitFadeOff();
+    UnitFocusOn();
+}
+
+@Suffix(0x30, 0x0)
+@Unknown(0x6D)
+callback[0x4](8, 13, 11, 16, 2, "ハールＣＰ移動") {
+    v0 = MindGetMe();
+    if (v0 == UnitGetByPID("PID_HAAR")) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_POINTMOVE_HAAR2");
+        set("ハールＣＰ移動");
+    }
+}
+
+@Suffix(0x5F, 0x0)
+@Unknown(0x7A)
+callback[0x4](8, 17, 10, 20, 2, "ハールＣＰ離脱") {
+    v0 = MindGetMe();
+    if (v0 == UnitGetByPID("PID_HAAR")) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_POINTMOVE_HAAR3");
+        set("ハールＣＰ離脱");
+    }
+}
+
+@Unknown(0x49)
+callback[0x4](8, 21, 8, 23, 2, "ハール離脱") {
+    UnitFocusOff();
+    v0 = MindGetMe();
+    if (v0 == UnitGetByPID("PID_HAAR")) {
+        UnitFadeOut();
+        UnitMoveDir(v0, "4");
+        UnitMoveWait();
+        UnitFadeOff();
+        UnitEscape(v0);
+        set("ハール離脱");
+    }
+}
+
+@Suffix(0x45)
+@Unknown(0x56)
+callback[Event.Poke](23, 21, 45, "") {
+    anonfn0();
+}
+
+@Suffix(0x61)
+@Unknown(0x6F)
+callback[Event.Poke](23, 22, 45, "") {
+    anonfn0();
+}
+
+@Suffix(0x5F)
+@Unknown(0x61)
+callback[Event.Poke](21, 23, 45, "") {
+    anonfn0();
+}
+
+@Suffix(0x73)
+@Unknown(0x5F)
+callback[Event.Poke](22, 23, 45, "") {
+    anonfn0();
+}
+
+@Unknown(0x4D)
+def anonfn13() {
+    v0 = 1;
+    v1 = ForceGetFirst(1);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        printf("  赤軍撤退ui=%d", v1);
+        if (v1 != 0) {
+            UnitSetCpAttackSeq(v1, "SEQ_0201_ATTACK_LEARNE_RESCUE");
+            UnitSetCpMoveSeq(v1, "SEQ_0201_MOVE_LEARNE_RESCUE");
+        }
+        v1 = v0;
+    }
+    set("ＣＰ総攻撃");
+}
+
+@Suffix(0x54)
+@Unknown(0x74)
+callback[0x4](19, 13, 23, 15, 0, "ＣＰ総攻撃") {
+    anonfn13();
+}
+
+@Suffix(0x5F)
+@Unknown(0x69)
+callback[0x4](16, 16, 23, 23, 0, "ＣＰ総攻撃") {
+    anonfn13();
+}
+
+@Suffix(0x56)
+@Unknown(0x65)
+callback[0x4](13, 18, 15, 23, 0, "ＣＰ総攻撃") {
+    anonfn13();
+}
+
+@Unknown(0x74)
+def RegistLocationFlags() {
+    regist("ハールＣＰ移動");
+    regist("ハールＣＰ離脱");
+    regist("ハール離脱");
+    regist("ＣＰ総攻撃");
+}
+
+@Prefix(0x6C, 0x52, 0x75)
+@Suffix(0x79, 0x70)
+@Unknown(0x7E)
+def RegistLocationTT() {}
+
+@Prefix(0x0, 0x4D)
+@Unknown(0x82)
+def DFSet_0201_OP() {
+    DDFlagOn("DF_人物エリンシア");
+    DDFlagOn("DF_人物ジョフレ");
+    DDFlagOn("DF_人物ニアルチ");
+    DDFlagOn("DF_人物マーシャ");
+    DDFlagOn("DF_人物ユリシーズ");
+    DDFlagOn("DF_人物ルキノ");
+    DDFlagOn("DF_人物レニング");
+    DDFlagOn("DF_関係ルキノジョフレ姉弟");
+    DDFlagOn("DF_関係エリンシアレニング叔父");
+    DDFlagOn("DF_関係エリンシアルキノジョフレ乳兄弟");
+    DDFlagOn("DF_関係ジョフレユリシーズ親友");
+    DDFlagOn("DF_関係ユリシーズレニング忠誠");
+    DDFlagOn("DF_国クリミア");
+    DDFlagOn("DF_国キルヴァス");
+    DDFlagOn("DF_所属王宮騎士団");
+    DDFlagOn("DF_所属聖天馬騎士団");
+    DDFlagOn("DF_用語キルヴァス");
+    DDFlagOn("DF_用語クリミア王宮騎士団");
+    DDFlagOn("DF_用語聖天馬騎士団");
+    DDFlagOn("DF_用語聖竜騎士団");
+}
+
+def DFSet_0201_ED() {
+    DDFlagOn("DF_人物ハール");
+    DDFlagOn("DF_関係ハールジル信頼");
+}
+
+@Suffix(0x2E, 0x0, 0x0)
+def Startup() {
+    regist("ハール仲間");
+    regist("エリンシア⇔ハール");
+    regist("ボス会話");
+    regist("ボス会話エリンシア");
+    regist("ボス会話ハール");
+    RegistLocationFlags();
+}
+
+@Suffix(0x48, 0x0, 0x0)
+def gmap0201_xfade_JP() {
+    WaitF(160);
+    GMapFout(40);
+}
+
+def gmap0201_erincia_JP() {
+    WaitM(4800);
+    RectSetPos("RID_bgエリンシア", 0, 0);
+    RectSetCurve("RID_bgエリンシア", 9, 0, 0, 255, 1400);
+}
+
+def anonfn24() {
+    FaceCreate(0, "FID_ERINCIA", 174, 283, 400, 26639);
+}
+
+@Suffix(0x2C, 0x1C, 0x25)
+@Unknown(0x2)
+def gmap0201_erincia2_JP() {
+    WaitM(6000);
+    anonfn24();
+}
+
+@Suffix(0x0, 0x81, 0x0)
+def anonfn26() {
+    BlackOut();
+    GMapBuild("GID_0201");
+    GMapBuild("GID_0201_2");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0201_2");
+    GMapMove(468, 345, 6495, 6492, 0, 0);
+    GMapSetCurrentGID("GID_0201");
+    GMapMove(512, 380, 5937, 5894, 0, 0);
+    FacePreLoad("FID_ERINCIA");
+    FacePreLoad("FID_IKE2_G");
+    EvRectSet("RID_bgエリンシア", 0);
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    GMapRegionOn(0, "EID_TERRITORY_CRIMEA");
+    GMapFlagMarkOn(0, 107, 89, 0, 0);
+    CreateVMCThread("gmap0201_erincia_JP");
+    TalkEvent("MS_0201_GMAP_01");
+    GMapRegionOn(1, "EID_TERRITORY_GALIA");
+    GMapFlagMarkOn(1, 36, 183, 1, 0);
+    TalkResume();
+    KillAllVMCThread();
+    RectFadeOutDelete("RID_bgエリンシア", 45);
+    GMapRegionOffAll();
+    GMapFlagMarkOffAll();
+    WaitM(2000);
+    CreateVMCThread("gmap0201_xfade_JP");
+    GMapMove(262, 195, 11500, 11408, 240, 0);
+    WaitF(260);
+    WaitForVMCThread();
+    GMapSetCurrentGID("GID_0201_2");
+    CreateVMCThread("gmap0201_erincia2_JP");
+    TalkEvent("MS_0201_GMAP_02");
+    KillAllVMCThread();
+    if (!IsFaceEnable(0)) {
+        anonfn24();
+    }
+    GMapPointOn(0, 346, 244, 100, 2109836);
+    FaceCreate(1, "FID_IKE2_G", 480, 203, 400, 26638);
+    TalkResume();
+    WaitM(1000);
+    TalkResume();
+    FaceDelete(1, 400);
+    FaceMove(1, 510, 203, 390, 2);
+    WaitM(1500);
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0201_2");
+    GMapKill("GID_0201");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+@Prefix(0x38)
+@Unknown(0x1)
+def gmap0201_Region_NOANOE() {
+    GMapRegionOn(0, "EID_TERRITORY_DAYNE");
+    GMapFlagMarkOn(0, 306, 38, 2, 0);
+    WaitM(3000);
+    GMapRegionOn(1, "EID_TERRITORY_CRIMEA");
+    GMapFlagMarkOn(1, 107, 89, 0, 0);
+}
+
+@Prefix(0x53, 0x65)
+@Suffix(0x1C, 0x0, 0x0)
+@Unknown(0x52)
+def gmap0201_xfade_NOANOE() {
+    WaitF(160);
+    GMapFout(40);
+}
+
+def anonfn29() {
+    FaceCreate(0, "FID_ERINCIA", 224, 294, 400, 26639);
+}
+
+@Prefix(0x0, 0x66, 0x65)
+@Suffix(0x0, 0x0, 0x64)
+@Unknown(0x38)
+def gmap0201_erincia2_NOANOE() {
+    WaitM(3000);
+    anonfn29();
+}
+
+@Suffix(0xB6, 0x1, 0x20)
+@Unknown(0x2)
+def anonfn31() {
+    BlackOut();
+    GMapBuild("GID_0201");
+    GMapBuild("GID_0201_2");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0201_2");
+    GMapMove(468, 345, 6495, 6492, 0, 0);
+    GMapSetCurrentGID("GID_0201");
+    GMapMove(512, 380, 5937, 5894, 0, 0);
+    FacePreLoad("FID_ERINCIA");
+    FacePreLoad("FID_IKE2_G");
+    FacePreLoad("FID_SENATOR1");
+    FacePreLoad("FID_SENATOR2");
+    EvRectSet("RID_bgエリンシア", 0);
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    CreateVMCThread("gmap0201_Region_NOANOE");
+    TalkEvent("MS_0201_GMAP_01");
+    WaitForVMCThread();
+    WaitM(1000);
+    GMapRegionOff(0);
+    GMapFlagMarkOff(0);
+    TalkResume();
+    RectSetPos("RID_bgエリンシア", 0, 0);
+    RectSetCurve("RID_bgエリンシア", 9, 0, 0, 255, 1400);
+    TalkResume();
+    RectFadeOutDelete("RID_bgエリンシア", 45);
+    GMapRegionOff(1);
+    GMapFlagMarkOff(1);
+    WaitM(2000);
+    CreateVMCThread("gmap0201_xfade_NOANOE");
+    GMapMove(262, 195, 11500, 11408, 240, 0);
+    WaitF(260);
+    WaitForVMCThread();
+    GMapSetCurrentGID("GID_0201_2");
+    CreateVMCThread("gmap0201_erincia2_NOANOE");
+    TalkEvent("MS_0201_GMAP_02");
+    KillAllVMCThread();
+    if (!IsFaceEnable(0)) {
+        anonfn29();
+    }
+    FaceCreate(2, "FID_SENATOR1", 430, 294, 400, 26638);
+    FaceCreate(3, "FID_SENATOR2", 520, 225, 400, 26638);
+    TalkResume();
+    FaceCreate(1, "FID_IKE2_G", 180, 178, 400, 26639);
+    TalkResume();
+    FaceDelete(1, 400);
+    FaceMove(1, 150, 178, 390, 2);
+    WaitM(1500);
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0201_2");
+    GMapKill("GID_0201");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+@Prefix(0x0, 0x38)
+@Suffix(0x2)
+@Unknown(0x5)
+callback[Event.Turn](1, 1, 1) {
+    if (EvKeyRead()) {
+        set("gf_complete");
+    }
+}
+
+@Unknown(0x7)
+def anonfn33() {
+    EvDevStart("bmap0201", "bmap0201_mikata");
+    MapLoad("bmap0201");
+    SallySetByGroupRank("bmap0201_mikata");
+    InstantDisposRank("bmap0201_mikata");
+    UnitForcedSallyByPID("PID_ERINCIA");
+    UnitForcedSallyByPID("PID_MARCIA");
+    UnitDontMoveSallyByPID("PID_ERINCIA");
+    UnitDontMoveSallyByPID("PID_MARCIA");
+    v0 = UnitGetByPID("PID_ERINCIA");
+    if (!UnitTstSkill(v0, "SID_HERO")) {
+        UnitAddSkill(v0, "SID_HERO");
+    }
+    InstantDisposRank("bmap0201_teki");
+    InstantDisposRank("bmap0201_mikata2");
+    v1 = UnitGetByPID("PID_NEALUCHI");
+    #v2 = UnitSearchItem(v1, "IID_CHANGESTONE");
+    #printf("化身の石 ＝ %d", v2);
+    #UnitItemSetEndurance(v1, v2, 2);
+    #InstantUnitTransform(v1, 1);
+    v3 = UnitGetByPID("PID_LEARNE");
+    v4 = 1;
+    v1 = ForceGetFirst(1);
+    while (v4 != 0) {
+        v4 = UnitGetNext(v1);
+        UnitRotateToUnit(v1, v3, 0);
+        v1 = v4;
+    }
+    InstantHeroFocus();
+    FadeIn_Wait(500);
+}
+
+@Prefix(0x7, 0x1, 0x19)
+@Unknown(0x14)
+def Opening0() {
+    BMSetMoney(20000);
+    FadeIn(500);
+    EffectPlay("EID_SECTION2");
+    EffectWait(negate(1));
+    WaitM(500);
+    Comeback();
+    BlackOut();
+    if (EvKeyReadY()) {
+        anonfn4();
+    }
+    if (IsJPVersion()) {
+        anonfn26();
+        goto l2;
+    }
+    anonfn31();
+    label l2;
+    ChapterTitle("C0201");
+    anonfn1();
+    anonfn33();
+    set("エリンシア⇔ハール");
+    DFSet_0201_OP();
+}
+
+@Unknown(0x19)
+callback[0x8]("PID_MARCIA", "PID_HAAR", 0, "ハール仲間") {
+    BGM1Start_From0("BGM_EVT_2_1_D");
+    TalkEvent("MS_0201_TK_01");
+    SFXPlay("SFX_EVT_0201_DRAGON_CRY1");
+    TalkResume();
+    BGM0Start_From1();
+    UnitTransferToForceByPID("PID_HAAR", 0);
+    set("ハール仲間");
+    clr("エリンシア⇔ハール");
+}
+
+#callback[0x8]("PID_ERINCIA", "PID_HAAR", 0, "エリンシア⇔ハール") {
+#    BGMQuietOn(500);
+#    TalkEvent("MS_0201_TK_02_A");
+#    BGMQuietOff(1000);
+#    set("エリンシア⇔ハール");
+#}
+
+#@Unknown(0x1)
+#callback[0x8]("PID_HAAR", "PID_ERINCIA", 0, "エリンシア⇔ハール") {
+#    BGMQuietOn(500);
+#    TalkEvent("MS_0201_TK_02_B");
+#    BGMQuietOff(1000);
+#    set("エリンシア⇔ハール");
+#}
+
+@Unknown(0x1)
+def anonfn38() {
+    DisposFirstRank("bmap0201_z01");
+    UnitFocusByPID_Wait("PID_HAAR");
+    BGMQuietOn(500);
+    TalkEvent("MS_0201_EV_01");
+    SFXPlay("SFX_EVT_0201_DRAGON_CRY1");
+    TalkResume();
+    SFXPlay("SFX_EVT_0201_DRAGON_CRY2");
+    TalkResume();
+    UnitRotateByPID("PID_HAAR", 4, negate(1));
+    UnitMoveWait();
+    TalkResume();
+    BGMQuietOff(1000);
+    DisposContinueRank("bmap0201_z01");
+    UnitMoveWait();
+}
+
+@Prefix(0xF, 0x19)
+@Suffix(0x78, 0x2)
+@Unknown(0xB5)
+callback[Event.Turn](2, 2, 0) {
+    if (Normal()) {
+        anonfn38();
+    }
+}
+
+@Prefix(0xD8, 0x1)
+@Suffix(0xE7)
+@Unknown(0x9)
+callback[Event.Turn](3, 3, 0) {
+    if (Normal()) {
+        v0 = UnitGetByPID("PID_HAAR");
+        UnitSetCpMoveSeq(v0, "SEQ_0201_POINTMOVE_HAAR1");
+    }
+}
+
+@Prefix(0x1D, 0xA)
+@Suffix(0x65)
+@Unknown(0x1C)
+callback[Event.Turn](3, 3, 0) {
+    if (!Normal()) {
+        anonfn38();
+        v0 = UnitGetByPID("PID_HAAR");
+        UnitSetCpMoveSeq(v0, "SEQ_0201_POINTMOVE_HAAR1");
+    }
+}
+
+#@Prefix(0x2, 0x20)
+#@Suffix(0x2)
+#@Unknown(0x9)
+#callback[Event.Turn](6, 6, 0) {
+#    anonfn13();
+#}
+
+@Prefix(0x6, 0xA4)
+@Suffix(0x8, 0x86)
+@Unknown(0x1D)
+callback[Event.Turn](2, 2, 0) {
+    v0 = UnitGetByPos(17, 9);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+}
+
+callback[Event.Turn](2, 2, 0) {
+    DisposRank("bmap0201_z05");
+}
+
+@Prefix(0x19, 0x0)
+@Unknown(0x38)
+callback[Event.Turn](3, 3, 0) {
+    v0 = UnitGetByPos(10, 18);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+    v0 = UnitGetByPos(9, 22);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+}
+
+@Prefix(0x19, 0x1)
+@Suffix(0x64, 0x38)
+@Unknown(0x19)
+callback[Event.Turn](4, 4, 0) {
+    v0 = UnitGetByPos(21, 10);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+}
+
+callback[Event.Turn](4, 4, 0) {
+    DisposRank("bmap0201_z02");
+}
+
+@Prefix(0x20, 0x1)
+@Unknown(0x4)
+callback[Event.Turn](5, 5, 0) {
+    v0 = UnitGetByPos(14, 23);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+    v0 = UnitGetByPos(17, 22);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpMoveSeq(v0, "SEQ_0201_MOVE_LEARNE_RESCUE");
+    }
+}
+
+callback[Event.Turn](5, 5, 0) {
+    DisposRank("bmap0201_z03");
+}
+
+callback[Event.Turn](7, 7, 0) {
+    DisposRank("bmap0201_z02");
+    DisposRank("bmap0201_z04");
+}
+
+@Prefix(0x19, 0xC)
+@Unknown(0x19)
+callback[Event.Turn](9, 9, 0) {
+    set("gf_complete");
+}
+
+@Prefix(0x1, 0x8)
+@Suffix(0x4, 0x0)
+@Unknown(0x19)
+callback[Event.DieMap]("PID_ERINCIA") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MS_0201_DIE_ERINCIA");
+}
+
+@Prefix(0x38, 0x5)
+@Suffix(0x19, 0x0)
+@Unknown(0x19)
+callback[Event.DieMap]("PID_LEARNE") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MS_0201_DIE_LEARNE");
+}
+
+#@Prefix(0x0, 0x20)
+#@Unknown(0x9)
+#callback[Event.DieMap]("PID_NEALUCHI") {
+#    set("gf_gameover");
+#    LocalDieTalkWithBgmChange("Hero", "MS_0201_DIE_Nea");
+#}
+
+@Prefix(0x20, 0x38)
+@Suffix(0x4)
+@Unknown(0xC8)
+callback[Event.DieMap]("PID_MARCIA") {
+    LocalDieTalkWithBgmChange_type("PID_MARCIA", "MS_0201_DIE_Mar");
+}
+
+@Suffix(0x2, 0x20)
+@Unknown(0x9)
+callback[Event.DieBattle]("PID_ZEFFREN", "", 1, "ボス会話") {
+    if (BossTalkExclusion("PID_ERINCIA") || BossTalkExclusion("PID_HAAR")) {
+        return 0;
+    }
+    BGM1Start_From0("BGM_EVT_TALK_BOSS1");
+    TalkEvent("MS_0201_BT");
+    BGM0Start_From1();
+    set("ボス会話");
+}
+
+@Suffix(0x9, 0x19, 0x0)
+@Unknown(0x20)
+callback[Event.DieBattle]("PID_ZEFFREN", "PID_ERINCIA", 1, "ボス会話エリンシア") {
+    BGM1Start_From0("BGM_EVT_TALK_BOSS1");
+    TalkEvent("MS_0201_BT_ERINCIA");
+    BGM0Start_From1();
+    set("ボス会話エリンシア");
+}
+
+@Suffix(0x19, 0x0, 0x19)
+@Unknown(0xB)
+callback[Event.DieBattle]("PID_ZEFFREN", "PID_HAAR", 1, "ボス会話ハール") {
+    BGM1Start_From0("BGM_EVT_TALK_BOSS1");
+    TalkEvent("MS_0201_BT_HAAR");
+    BGM0Start_From1();
+    set("ボス会話ハール");
+}
+
+@Prefix(0x20, 0x1)
+callback[Event.DieMap]("PID_ZEFFREN") {
+    BGMQuietOn(500);
+    TalkEvent("MS_0201_DIE");
+    BGMQuietOff(1000);
+}
+
+@Prefix(0x19, 0x1)
+@Unknown(0xA6)
+callback[0x1]("gf_complete") {
+    anonfn4();
+    v0 = UnitGetByPID("PID_ERINCIA");
+    UnitClrSkill(v0, "SID_HERO");
+    TEAM_0201_ED();
+    DFSet_0201_ED();
+}
+
+@Prefix(0x20, 0x45)
+@Unknown(0xE)
+callback[0xC]("") {
+    Achieve_CLEAR_BONUS(1000, 1000);
+    Achieve_TURN_BONUS(0, 0, 0, 0, 0, 0, 0, 0);
+    Achieve_LIVE_BONUS(0, 0);
+}
+
+@Prefix(0x20, 0x38)
+@Unknown(0x20)
+callback[Event.Turn](1, 1, 0) {
+    if (Normal()) {
+        DisableSkip();
+        TalkEvent("MS_0201_HELP");
+        EnableSkip();
+    }
+}
+
+callback[Event.TurnAfter](1, 1, 0) {
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        if ((UnitTstSkill(v1, "SID_ANIMALIZE"))) {
+            UnitFocus(v1);
+            UnitTransform(v1, 1);
+            UnitMoveWait();
+            UnitSet(v1, 8, 30);
+        }
+        v1 = v0;
+    }
+}
+
+#callback[Event.Turn](4, 4, 0) {
+#    set("gf_complete");
+#}

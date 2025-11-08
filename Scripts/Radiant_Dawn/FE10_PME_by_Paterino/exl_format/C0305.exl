@@ -1,0 +1,796 @@
+include std:fe10:prelude;
+
+def anonfn0() {
+    if (!get("先着到達")) {
+        v0 = MindGetMe();
+        v1 = UnitGetByPID("PID_IKE");
+        v2 = UnitGetByPID("PID_LAY");
+        if (v0 == v1 || v0 == v2) {
+            if (v0 == v1) {
+                v3 = UnitGetByPID("PID_LAY");
+                v4 = "MS_0305_ESC_IKE";
+                goto l3;
+            }
+            v3 = UnitGetByPID("PID_IKE");
+            v4 = "MS_0305_ESC_LAY";
+            label l3;
+            if (UnitGetX(v0) == 16 && UnitGetY(v0) == 10) {
+                printf("座標X1　X=%d　Y=%d", UnitGetX(v0), UnitGetY(v0));
+                if (!(UnitGetX(v3) == 17 && UnitGetY(v3) == 10)) {
+                    EvUnitRotateByPID(v0, v3, 200);
+                    UnitMoveWait();
+                    TalkEvent(v4);
+                    set("先着到達");
+                }
+                goto l0;
+            }
+            if (UnitGetX(v0) == 17 && UnitGetY(v0) == 10) {
+                printf("座標X2　X=%d　Y=%d", UnitGetX(v0), UnitGetY(v0));
+                if (!(UnitGetX(v3) == 16 && UnitGetY(v3) == 10)) {
+                    EvUnitRotateByPID(v0, v3, 200);
+                    UnitMoveWait();
+                    TalkEvent(v4);
+                    set("先着到達");
+                }
+            }
+        }
+    }
+    label l0;
+}
+
+@NoDefaultReturn
+def anonfn1() {
+    return anonfn33(16, 10);
+}
+
+@NoDefaultReturn
+def anonfn2() {
+    return anonfn33(17, 10);
+}
+
+callback[Event.Poke](16, 10, 42, "") {
+    if (Check()) {
+        return anonfn2();
+        goto l1;
+    }
+    set("gf_complete");
+    label l1;
+}
+
+callback[Event.Poke](17, 10, 42, "") {
+    if (Check()) {
+        return anonfn1();
+        goto l1;
+    }
+    set("gf_complete");
+    label l1;
+}
+
+callback[0x4](21, 11, 21, 11, 0, "埋宝１") {
+    GetRndTreasure("IID_COIN", "埋宝１");
+}
+
+callback[0x4](18, 17, 18, 17, 0, "埋宝２") {
+    GetRndTreasure("IID_COIN", "埋宝２");
+}
+
+callback[0x4](11, 23, 11, 23, 0, "埋宝３") {
+    GetRndTreasure("IID_COIN", "埋宝３");
+}
+
+def anonfn8() {
+    SetShooter(21, 12, 4, "IID_IRONARCH");
+}
+
+def anonfn9() {
+    SetShooter(12, 20, 4, "IID_IRONARCH");
+}
+
+callback[0x4](10, 10, 23, 15, 0, "ＣＰチェンジ１") {
+    set("ＣＰチェンジ１");
+    v0 = UnitGetByPos(19, 14);
+    if (v0) {
+        UnitSetCpAttackSeq(v0, "SEQ_ALLUNITATTACK100");
+        UnitSetCpMoveSeq(v0, "SEQ_NEARESTUNITMOVE");
+    }
+}
+
+def RegistLocationFlags() {
+    regist("ノーマル無し");
+    regist("ＣＰチェンジ１");
+    regist("埋宝１");
+    regist("埋宝２");
+    regist("埋宝３");
+}
+
+def RegistLocationTT() {
+    anonfn8();
+    anonfn9();
+}
+
+def RegistBaseTalkFlags() {
+    regist("拠点会話_シノン");
+}
+
+callback[0xE]("シノン", "拠点会話_シノン") {
+    if (Check()) {
+        if ((!UnitCheckPlayerOrAbsentByPID("PID_IKE") || !UnitCheckReadyToBaseTalkByPID("PID_CHINON")) || 0) {
+            return 0;
+        }
+        return 1;
+        goto l4;
+    }
+    TalkEvent_Important("MID_0305_シノン会話");
+    if (IsConversationRoom()) {
+        return 0;
+    }
+    if (UnitCheckPlayerOrAbsentByPID("PID_IKE")) {
+        UnitGetItemShowing(UnitGetByPID("PID_IKE"), "IID_BLUEGEM");
+    }
+    set("拠点会話_シノン");
+    label l4;
+}
+
+def DFSet_0305_OP0() {}
+
+def DFSet_0305_OP1() {
+    DDFlagOn("DF_人物キサ");
+    DDFlagOn("DF_関係ライキサ部下");
+}
+
+def DFSet_0305_ED() {
+    DDFlagOn("DF_人物タニス");
+    DDFlagOn("DF_用語神使親衛隊");
+}
+
+def anonfn18() {
+    BGM1FadeStart("BGM_EVT_3_5_A");
+    ENV1Start("SFX_ENV_0305_BEGNION1");
+    TalkEvent("MS_0305_OP_01_T");
+    ENV1FadeOut_Fast();
+    ENV2Start("SFX_ENV_0305_BEGNION2");
+    TalkEvent("MS_0305_OP_01");
+    BGM1VolumeDown();
+    TalkEvent("MS_0305_OP_01_02");
+    ENV2FadeOut();
+    BGM1FadeOut();
+    TelopInFast("EID_T0301B");
+    REventStart("emapCgar01", 1);
+    ENV2Start("SFX_ENV_0305_BASE1");
+    CameraSet(0, 4000, 1600, 1250, 650, 0);
+    FadeIn(500);
+    WaitM(3000);
+    FadeOut_Wait(500);
+    REventEnd(1, 1);
+    ENV2FadeOut_Fast();
+    REventStart("emapKgar01", 1);
+    InstantDispos("emapKgar01_0305_op_02_c");
+    InstantForceUnitLanding(0);
+    v0 = UnitGetByPID("PID_TIBARN");
+    UnitSetOffset(v0, negate(50), 0, 0);
+    InstantUnitFocus(v0);
+    BGM1Start("BGM_EVT_3_5_B");
+    ENV1Start("SFX_ENV_0305_TENT_IN1");
+    FadeIn_Wait(500);
+    UnitMovePosByPID("PID_SENERIO", 6, 9);
+    WaitM(400);
+    UnitPosRotateByPID("PID_TIAMAT_EV", 6, 9, negate(1));
+    UnitPosRotateByPID("PID_LAY", 6, 9, negate(1));
+    UnitMoveWait();
+    TalkEvent("MS_0305_OP_02_1");
+    UnitSeeByPID("PID_SKRIMIR", "PID_SENERIO");
+    UnitMoveWait();
+    TalkResume();
+    UnitMoveRoutePtoP(6, 9, "8,8, 8,6, 7,6");
+    UnitRotateByPID("PID_SKRIMIR", 2, 800);
+    UnitRotateByPID("PID_TIAMAT_EV", 8, 800);
+    UnitRotateByPID("PID_LAY", 2, negate(1));
+    TalkResume();
+    UnitMoveWait();
+    TalkResume();
+    UnitRotateByPID("PID_TIAMAT_EV", 1, negate(1));
+    UnitMoveWait();
+    TalkResume();
+    if (UnitQueryJIDByPID("PID_SENERIO", "JID_WINDSAGE")) {
+        UnitAnimByPID("PID_SENERIO", "イベント１");
+    }
+    TalkEvent("MS_0305_OP_02_2");
+    UnitAnimByPID("PID_SENERIO", "待機");
+    TalkResume();
+    if (UnitQueryJIDByPID("PID_SENERIO", "JID_WINDSAGE")) {
+        UnitAnimByPID("PID_SENERIO", "イベント１");
+    }
+    TalkResume();
+    UnitSeeByPID("PID_IKE", "PID_LAY");
+    TalkResume();
+    UnitSeeByPID("PID_TIAMAT_EV", "PID_LAY");
+    UnitSeeByPID("PID_SKRIMIR", "PID_LAY");
+    UnitSeeByPID("PID_TIBARN", "PID_LAY");
+    TalkResume();
+    UnitRotateByPID("PID_LAY", 8, negate(1));
+    UnitMoveWait();
+    UnitRotateByPID("PID_LAY", 10, negate(1));
+    TalkResume();
+    UnitRotateByPID("PID_SKRIMIR", 2, negate(1));
+    TalkResume();
+    UnitSeeByPID("PID_IKE", "PID_TIBARN");
+    TalkResume();
+    UnitSeeByPID("PID_TIBARN", "PID_IKE");
+    UnitSeeByPID("PID_IKE", "PID_TIBARN");
+    UnitSeeByPID("PID_TIAMAT_EV", "PID_TIBARN");
+    UnitSeeByPID("PID_LAY", "PID_TIBARN");
+    TalkResume();
+    UnitSeeByPID("PID_LAY", "PID_SENERIO");
+    UnitSeeByPID("PID_IKE", "PID_SENERIO");
+    TalkResume();
+    UnitAnimByPID("PID_SENERIO", "待機");
+    TalkResume();
+    UnitSeeByPID("PID_TIAMAT_EV", "PID_SENERIO");
+    TalkResume();
+    UnitSeeByPID("PID_IKE", "PID_SENERIO");
+    TalkResume();
+    UnitSeeByPID("PID_TIBARN", "PID_SENERIO");
+    UnitSeeByPID("PID_SKRIMIR", "PID_SENERIO");
+    UnitSeeByPID("PID_TIAMAT_EV", "PID_SENERIO");
+    UnitSeeByPID("PID_LAY", "PID_SENERIO");
+    TalkResume();
+    UnitSeeByPID("PID_SENERIO", "PID_IKE");
+    TalkResume();
+    UnitRotateByPID("PID_SENERIO", 1, negate(1));
+    UnitMoveWait();
+    if (UnitQueryJIDByPID("PID_SENERIO", "JID_WINDSAGE")) {
+        UnitAnimByPID("PID_SENERIO", "イベント１");
+        UnitMoveWait();
+    }
+    TalkResume();
+    UnitAnimByPID("PID_SENERIO", "待機");
+    TalkResume();
+    FadeOut_Wait(500);
+    REventEnd(1, 1);
+    ENV1FadeOut();
+    BGM1FadeOut_Wait();
+}
+
+def anonfn19() {
+    BlackOut();
+    ENV1Start("SFX_ENV_0305_WIND4");
+    TalkEvent("MS_0305_OP1_01_T");
+    BGM1Start("BGM_EVT_3_5_C");
+    TalkEvent("MS_0305_OP1_01_A");
+    ENV1FadeOut_Fast();
+    BGM2Start_From1("BGM_EVT_3_5_D");
+    ENV2Start("SFX_ENV_0305_WIND4_2");
+    FadeIn(0);
+    TalkEvent("MS_0305_OP1_02_T");
+    FadeIn(0);
+    TalkEvent("MS_0305_OP1_02");
+    ENV2FadeOut();
+    BlackOut();
+    TelopInFast("EID_T0305D");
+    REventStart("bmap0305", 1);
+    CameraSet(0, 4584, 1500, 1658, 1480, negate(957));
+    InstantDisposRank("bmap0305_teki");
+    #InstantDisposRank("bmap0305_midori");
+    InstantDisposRank("bmap0305_z02");
+    InstantDispos("bmap0305_op_01_c");
+    FadeIn(1500);
+    CameraRecordInit();
+    CameraRecordAdd(3000, 0, 4500, 1500, 1784, 3692, negate(172));
+    CameraRecordAdd(6000, negate(2961), 5348, 1423, 2844, 4089, 100);
+    CameraRecordStart(6000);
+    CameraMoveWait(0);
+    WaitM(1000);
+    Dispos("bmap0305_op_01_mikata_c");
+    Warning("進撃予定メンバーが登場している");
+    UnitMoveRouteDirPtoP(32, 26, "28,37", 5);
+    UnitMoveRouteDirPtoP(33, 26, "29,37", 5);
+    UnitMoveRouteDirPtoP(32, 25, "28,36", 5);
+    UnitMoveRouteDirPtoP(33, 25, "29,36", 5);
+    UnitMoveRouteDirPtoP(32, 24, "29,35", 5);
+    UnitMoveRouteDirPtoP(33, 24, "30,35", 5);
+    UnitMoveRouteDirPtoP(32, 23, "30,34", 5);
+    WaitM(500);
+    UnitRotateByPID("PID_LAY", 10, negate(1));
+    UnitRotateByPID("PID_LIRE", 10, negate(1));
+    UnitRotateByPID("PID_KISA", 10, negate(1));
+    UnitRotateByPID("PID_RETHE", 10, negate(1));
+    UnitRotateByPID("PID_MORDY", 10, negate(1));
+    DisposWait();
+    UnitMoveWait();
+    TalkEvent("MS_0305_OP1_03");
+    UnitSeeByPID("PID_LAY", "PID_KISA");
+    TalkResume();
+    UnitSeeByPID("PID_KISA", "PID_LAY");
+    TalkResume();
+    UnitSeeByPID("PID_MORDY", "PID_LAY");
+    UnitSeeByPID("PID_LIRE", "PID_LAY");
+    UnitSeeByPID("PID_RETHE", "PID_LAY");
+    TalkResume();
+    FadeOut_Wait(500);
+    REventEnd(1, 1);
+    BGM2FadeOut_Wait();
+}
+
+def anonfn20() {
+    anonfn27();
+    Interval();
+    anonfn28();
+}
+
+def Startup() {
+    regist("ボス会話");
+    regist("ボス会話アイク");
+    regist("ボス会話ライ");
+    regist("先着到達");
+    RegistLocationFlags();
+    RegistBaseTalkFlags();
+}
+
+def gmap0305_advance() {
+    GMapPointOn(0, 278, 72, 100, 2109836);
+    GMapPointOn(1, 378, 112, 100, 9187616);
+    WaitM(3000);
+    GMapCurveDraw("curve0305_1");
+    WaitM(2400);
+    GMapPointOn(2, 345, 107, 100, 2109836);
+    GMapPointOff(0);
+    GMapCurveDispOnOff("curve0305_1", 0);
+}
+
+def gmap0305_advance2() {
+    FaceCreate(0, "FID_TIBARN", 134, 220, 400, 26639);
+    FaceMove(0, 154, 220, 400, 2);
+    FaceCreate(1, "FID_SKRIMIR", 224, 220, 400, 26639);
+    FaceMove(1, 244, 220, 400, 2);
+    WaitM(5000);
+    GMapPointOff(2);
+    GMapPointOff(1);
+    GMapPointOn(3, 378, 112, 100, 2109836);
+}
+
+def anonfn24() {
+    BlackOut();
+    GMapBuild("GID_0305");
+    WaitF(1);
+    GMapSetCurrentGID("GID_0305");
+    GMapMove(535, 460, 9000, 8928, 0, 0);
+    GMapCurveEntry("curve0305_1");
+    FacePreLoad("FID_SKRIMIR");
+    FacePreLoad("FID_ZELGIUS");
+    FacePreLoad("FID_TIBARN");
+    GMapBGMPlay();
+    FadeIn_Wait(1500);
+    WaitM(2000);
+    CreateVMCThread("gmap0305_advance");
+    TalkEvent("MS_0305_GMAP_01");
+    KillAllVMCThread();
+    GMapPointOff(0);
+    GMapCurveDispOnOff("curve0305_1", 0);
+    if (!IsGMapPointEnable(2)) {
+        GMapPointOn(2, 320, 90, 100, 2109836);
+    }
+    WaitM(1000);
+    CreateVMCThread("gmap0305_advance2");
+    TalkResume();
+    WaitForVMCThread();
+    FaceDelete(0, 400);
+    FaceDelete(1, 400);
+    WaitM(700);
+    FaceCreate(2, "FID_ZELGIUS", 520, 244, 400, 26638);
+    FaceMove(2, 500, 244, 400, 2);
+    TalkResume();
+    GMapPointOn(4, 439, 117, 100, 9187616);
+    TalkResume();
+    WaitM(1500);
+    GMapBGMStop();
+    FadeOut_Wait(1500);
+    TalkResume();
+    GMapKill("GID_0305");
+    FaceDeleteImmAll();
+    RectKillAll();
+    KillAllVMCThread();
+    if (Comeback()) {
+        DisableSkip();
+        WaitM(1500);
+        EnableSkip();
+        BlackOut();
+    }
+}
+
+callback[Event.Turn](1, 1, 1) {
+    if (EvKeyRead()) {
+        set("gf_complete");
+    }
+}
+
+def anonfn26() {
+    v0 = ForceGetFirst(1);
+    while (v0) {
+        v1 = UnitGetNext(v0);
+        if (v0 != UnitGetByPID("PID_ZELGIUS")) {
+            UnitEscape(v0);
+        }
+        v0 = v1;
+    }
+}
+
+def anonfn27() {
+    REventStart("emap0305c", 1);
+    InstantDispos("emap0305c_ed0305_01_c");
+    v0 = UnitGetByPID("PID_IKE");
+    v1 = UnitGetByPID("PID_LAY");
+    v2 = UnitGetByPID("PID_SKRIMIR");
+    v3 = UnitGetByPID("PID_ZELGIUS");
+    InstantDispos("emap0305c_ed0305_02_c");
+    v4 = UnitGetByPos(13, 17);
+    UnitSet(v4, 6, 1);
+    UnitHide(v4);
+    #InstantUnitTransform(v1, 0);
+    #InstantUnitTransform(v2, 1);
+    #InstantUnitTransform(v4, 1);
+    UnitAnim(v2, "構え");
+    UnitAnim(v3, "構え");
+    CameraSet(negate(1457), 4767, 1460, 350, 2250, negate(476));
+    ENV1Start("SFX_ENV_0305_WIND4_ED");
+    FadeIn_Wait(1500);
+    UnitMovePosDir(v1, 4, 24, 10);
+    UnitMoveWait();
+    TalkEvent("MS_0305_ED_01");
+    CameraMove(negate(1457), 4766, 1460, 1450, 1750, negate(500), 2000);
+    CameraMoveWait(0);
+    ENV1FadeOut();
+    UnitSetHP(v4, 80);
+    UnitSetHP(v3, 80);
+    UnitAddSkillWhatever(v4, "SID_IMMORTAL");
+    HidePrim2D(1);
+    NetuzoInit();
+    NetuzoBG("bg汎用03岩山");
+    NetuzoSetD(0, 1, 0, 20);
+    NetuzoSetD(1, 1, 0, 20);
+    NetuzoSetD(2, 2, 0, 60);
+    NetuzoSet(4, 8, 0);
+    NetuzoBattle(v3, v4, 0);
+    HidePrim2D(0);
+    UnitClrSkill(v4, "SID_IMMORTAL");
+    UnitEscape(v4);
+    ENV1Start("SFX_ENV_0305_WIND4_ED");
+    UnitAnim(v2, "死亡");
+    TalkEvent("MS_0305_ED_01_02");
+    CameraMove(negate(8004), 6649, 1510, 927, 1856, negate(500), 1000);
+    UnitWalkTime(100);
+    UnitMoveRouteDir(v0, " 6,20", 5);
+    UnitWalkTime(negate(1));
+    UnitWalkTime(250);
+    UnitMoveRouteDir(v1, " 5,21", 10);
+    UnitWalkTime(negate(1));
+    WaitM(800);
+    UnitMoveRouteDir(UnitGetByPos(15, 14), "14,15", 5);
+    UnitMoveWait();
+    TalkResume();
+    UnitMoveWait();
+    CameraWait();
+    UnitAnim_SetWalk(600);
+    UnitMoveRouteDir(v3, "17, 18", 2);
+    UnitAnim_SetWalk(negate(1));
+    SetCameraDecel_RotAt(3000, negate(8004), 6649, 1510, 1650, 2050, negate(528));
+    CameraWait();
+    UnitAnim(v3, "イベント２");
+    UnitMoveWaitID(v3);
+    UnitAnim(v3, "待機");
+    UnitRotateSilent_Normal(v0, 2);
+    UnitRotateSilent_Normal(v1, 2);
+    BGM1Start("BGM_EVT_3_5_E");
+    TalkEvent("MS_0305_ED_01_03");
+    UnitMoveWait();
+    ENV2Start("SFX_EVT_0305_BEGNION_CHEER1");
+    WaitM(1000);
+    TalkResume();
+    ENV2FadeOut();
+    XFade_Capture();
+    SetCameraMoment_RotAt(negate(5335), 4719, 1674, 2350, 50, negate(287));
+    XFade_StartWait(1500);
+    TalkEvent("MS_0305_ED_02");
+    XFade_Capture();
+    SetCameraMoment_RotAt(negate(4940), 6351, 1659, 2250, 2550, 606);
+    XFade_StartWait(500);
+    TalkResume();
+    UnitRotateSilent_Normal(UnitGetByPos(23, 26), 6);
+    UnitMoveWait();
+    UnitRotateSilent_Normal(UnitGetByPos(22, 28), 9);
+    UnitRotateSilent_Normal(UnitGetByPos(26, 24), 1);
+    WaitM(300);
+    UnitRotateSilent_Normal(UnitGetByPos(23, 29), 8);
+    UnitRotateSilent_Normal(UnitGetByPos(25, 26), 1);
+    UnitMoveWait();
+    TalkEvent("MS_0305_ED_03");
+    SFXPlay("SFX_EVT_0305_TIGER_ROAR1");
+    TalkResume();
+    WaitM(500);
+    XFade_Capture();
+    UnitSetPosDir(v0, 10, 22, 2);
+    UnitSetPosDir(v1, 11, 24, 2);
+    UnitRotate_Moment(v3, 5);
+    CameraSet(negate(5686), 5764, 2408, negate(61), 1933, 0);
+    XFade_StartWait(500);
+    TalkEvent("MS_0305_ED_03_02");
+    SetCameraDecel_RotAt(2000, negate(5295), 5825, 2522, 638, 1504, 0);
+    WaitM(1000);
+    TalkResume();
+    CameraWait();
+    UnitMoveWait();
+    UnitRotateSilent_Normal(v3, 9);
+    UnitMoveWait();
+    UnitMoveRouteDir(UnitGetByPos(14, 15), "16,17", 6);
+    TalkResume();
+    UnitMoveWait();
+    TalkResume();
+    BGM1VolumeDown();
+    FadeOut_Wait(1000);
+    anonfn26();
+    UnitSetPosDir(v0, 10, 16, 2);
+    UnitSetPosDir(v1, 11, 17, 2);
+    CameraSet(negate(2988), 6089, 1381, 1311, 1767, negate(571));
+    UnitSetPosDir(v1, 12, 18, 2);
+    UnitAnim_Moment(v1, "イベント１");
+    Interval();
+    UnitMoveRoute(v3, "15,16");
+    FadeIn_Wait(1000);
+    UnitMoveWait();
+    UnitSee(v3, v0);
+    TalkEvent("MS_0305_ED_03_03");
+    UnitAnim_SetWalk(1000);
+    UnitMoveRoute(v3, "16,14");
+    UnitAnim_SetWalk(negate(1));
+    WaitM(1000);
+    TalkResume();
+    UnitMoveWait();
+    UnitRotateSilent_Normal(v3, 5);
+    TalkResume();
+    UnitMoveWait();
+    UnitRotateSilent_Normal(v0, 2);
+    UnitRotateSilent_Normal(v1, 2);
+    TalkResume();
+    UnitMoveWait();
+    UnitAnim_SetWalk(500);
+    UnitMoveRoute(v3, "17,5");
+    UnitAnim_SetWalk(negate(1));
+    WaitM(2000);
+    FadeOut_Wait(1500);
+    REventEnd(1, 1);
+    ENV1FadeOut();
+    BGM1FadeOut_Wait();
+}
+
+def anonfn28() {
+    REventStart("emap0305b", 1);
+    SetCameraMoment_RotAt(2466, 5694, 2040, 1150, 550, negate(100));
+    SetCameraLinear_RotAt(6000, 2466, 5694, 2040, 1850, 550, negate(200));
+    BGM1Start("BGM_EVT_3_5_F");
+    ENV1Start("SFX_ENV_0305_NIGHT1");
+    FadeIn_Wait(1500);
+    WaitM(3000);
+    FadeOut_Wait(1500);
+    CameraClear();
+    REventEnd(1, 1);
+    ENVVolumeDown();
+    TalkEvent("MS_0305_ED_04");
+    ENV1FadeOut_Slow();
+    BGM1FadeOut_Slow_Wait();
+}
+
+def anonfn29() {
+    Comeback();
+    BlackOut();
+    MapLoad("bmap0305");
+    SallySetByGroupRank("bmap0305_mikata");
+    InstantDisposRank("bmap0305_mikata");
+    UnitForcedSallyByPID("PID_IKE");
+    UnitDontMoveSallyByPID("PID_IKE");
+    UnitForcedSallyByPID("PID_LAY");
+    UnitDontMoveSallyByPID("PID_LAY");
+    InstantDisposRank("bmap0305_teki");
+    #InstantDisposRank("bmap0305_midori");
+    InstantDisposRank("bmap0305_z02");
+    #InstantDisposRank("bmap0305_z03");
+    #InstantDisposRank("bmap0305_z04");
+    #InstantDisposRank("bmap0305_z05");
+    printf("ラグズ兵化身開始");
+    v0 = ForceGetFirst(2);
+    while (v0) {
+        if (UnitQueryPID(v0, "PID_GALIA_TIGER")) {
+            UnitTransform(v0, 1);
+        }
+        if (UnitQueryPID(v0, "PID_GALIA_CAT")) {
+            UnitTransform(v0, 1);
+        }
+        v0 = UnitGetNext(v0);
+    }
+    v1 = 1;
+    v0 = ForceGetFirst(0);
+    while (v1 != 0) {
+        v1 = UnitGetNext(v0);
+        UnitRotate(v0, 8, 0);
+        v0 = v1;
+    }
+    v1 = 1;
+    v0 = ForceGetFirst(2);
+    while (v1 != 0) {
+        v1 = UnitGetNext(v0);
+        UnitRotate(v0, 8, 0);
+        v0 = v1;
+    }
+    UnitForcedSallyByPID("PID_IKE");
+    UnitForcedSallyByPID("PID_LAY");
+    UnitDontMoveSallyByPID("PID_IKE");
+    UnitForcedSallyByPID("PID_LAY");
+    InstantHeroFocus();
+    FadeIn_Wait(500);
+}
+
+def Opening0() {
+    BlackOut();
+    if (EvKeyReadY()) {
+        anonfn20();
+    }
+    anonfn24();
+    ChapterTitle("C0305");
+    anonfn18();
+    DFSet_0305_OP0();
+}
+
+def Opening1() {
+    EvDevStart("bmap0305", "bmap0305_mikata");
+    anonfn19();
+    TEAM_0305_OP();
+    anonfn29();
+    DFSet_0305_OP1();
+}
+
+def Opening2() {
+    WaitM(500);
+}
+
+def anonfn33(v0, v1) {
+    v2 = MindGetMe();
+    v3 = UnitGetByPID("PID_IKE");
+    v4 = UnitGetByPID("PID_LAY");
+    if (v2 == v3) {
+        if (UnitGetX(v4) == v0 && UnitGetY(v4) == v1) {
+            return 1;
+            goto l3;
+        }
+        return 0;
+        label l3;
+        goto l4;
+    }
+    if (v2 == v4) {
+        if (UnitGetX(v3) == v0 && UnitGetY(v3) == v1) {
+            return 1;
+            goto l8;
+        }
+        return 0;
+        label l8;
+        goto l4;
+    }
+    return 0;
+    label l4;
+}
+
+callback[0x7]() {
+    anonfn0();
+}
+
+callback[Event.DieMap]("PID_IKE") {
+    set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MDIE_IKE");
+}
+
+callback[Event.DieMap]("PID_LAY") {
+    #set("gf_gameover");
+    LocalDieTalkWithBgmChange("Hero", "MDIE_Lay");
+}
+
+callback[Event.DieBattle]("PID_KAZISA", "", 1, "ボス会話") {
+    if (BossTalkExclusion("PID_IKE") || BossTalkExclusion("PID_LAY")) {
+        return 0;
+    }
+    TalkEvent_BossBGM("MS_0305_BT", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話");
+}
+
+callback[Event.DieBattle]("PID_KAZISA", "PID_IKE", 1, "ボス会話アイク") {
+    TalkEvent_BossBGM("MS_0305_BT_IKE", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話アイク");
+}
+
+callback[Event.DieBattle]("PID_KAZISA", "PID_LAY", 1, "ボス会話ライ") {
+    TalkEvent_BossBGM("MS_0305_BT_LAY", "BGM_EVT_TALK_BOSS1");
+    set("ボス会話ライ");
+}
+
+callback[Event.DieMap]("PID_KAZISA") {
+    TalkEvent_Die("MS_0305_DIE");
+}
+
+callback[Event.Turn](2, 2, 0) {
+    v0 = UnitGetByPos(18, 19);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpAttackSeq(v0, "SEQ_0305_ATK100_EXCEPTFOR_GALIA");
+        UnitSetCpMoveSeq(v0, "SEQ_0305_NEARESTUNITMOVE_EXCEPTFOR_GALIA");
+    }
+}
+
+callback[Event.Turn](3, 3, 0) {
+    v0 = UnitGetByPos(20, 11);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpAttackSeq(v0, "SEQ_0305_ATK100_EXCEPTFOR_GALIA");
+        UnitSetCpMoveSeq(v0, "SEQ_0305_NEARESTUNITMOVE_EXCEPTFOR_GALIA");
+    }
+    v0 = UnitGetByPos(22, 11);
+    if (v0 && UnitGetForce(v0) == 1) {
+        UnitSetCpAttackSeq(v0, "SEQ_0305_ATK100_EXCEPTFOR_GALIA");
+        UnitSetCpMoveSeq(v0, "SEQ_0305_NEARESTUNITMOVE_EXCEPTFOR_GALIA");
+    }
+}
+
+callback[Event.Turn](1, 1, 0) {
+    #set("gf_complete");
+}
+
+callback[Event.Turn](4, 4, 0) {
+    DisposRank("bmap0305_z01");
+}
+
+callback[Event.Turn](6, 6, 0) {
+    DisposRank("bmap0305_z03");
+}
+
+callback[Event.Turn](8, 8, 0) {
+    DisposRank("bmap0305_z04");
+}
+
+callback[Event.Turn](9, 9, 0) {
+    DisposRank("bmap0305_z05");
+}
+
+#callback[Event.Turn](130, 130, 0) {
+#    set("gf_complete");
+#}
+
+callback[0x1]("gf_complete") {
+    WaitM(250);
+    FadeOut(1500);
+    WaitM(750);
+    BGMFadeOut(0, 1500);
+    WaitM(1500);
+    AllUnitEscape();
+    MapFree();
+    anonfn20();
+    DFSet_0305_ED();
+}
+
+callback[0xC]("") {
+    Achieve_CLEAR_BONUS(3500, 3500);
+    Achieve_TURN_BONUS(1750, 875, 10, 12, 1750, 875, 10, 12);
+    Achieve_LIVE_BONUS(0, 0);
+    Achieve_EVENT_BONUS("MS_ACH_LIVE_GARIA", 200 * UnitGetBelongCount(7), 1000, 200 * UnitGetBelongCount(7), 1000);
+}
+
+callback[Event.TurnAfter](1, 1, 0) {
+    v0 = 1;
+    v1 = ForceGetFirst(0);
+    while (v0 != 0) {
+        v0 = UnitGetNext(v1);
+        if ((UnitTstSkill(v1, "SID_ANIMALIZE"))) {
+            UnitFocus(v1);
+            UnitTransform(v1, 1);
+            UnitMoveWait();
+            UnitSet(v1, 8, 30);
+        }
+        v1 = v0;
+    }
+}
+
+#callback[Event.Turn](1, 1, 0) {
+#    set("gf_complete");
+#}
